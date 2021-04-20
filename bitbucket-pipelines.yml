@@ -1,0 +1,22 @@
+image: node:lts
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Build
+          caches:
+            - node
+          script:
+            - npm install && npm run install-pose-runtimes
+            - npm run build
+          artifacts:
+            - public/**
+      - step:
+          name: Deploy to production
+          deployment: Production
+          script:
+            - apt-get update
+            - apt-get -qq install lftp
+            - lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST -e 'mirror --dereference -v -e -R public/ . ; bye' # The target directory is . because the FTP user is jailed into
+                                                                                                               # a specific dir set in the host control panel
