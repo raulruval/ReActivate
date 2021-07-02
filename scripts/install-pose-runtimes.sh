@@ -44,7 +44,7 @@ fi
 mkdir -p "public/vendor/@mediapipe/pose@${version}"
 pushd public/vendor/@mediapipe > /dev/null
 
-files=("pose_solution_packed_assets_loader.js" "pose_solution_packed_assets.data" "pose_solution_wasm_bin.js" "pose_solution_wasm_bin.wasm" "pose_web.binarypb")
+files=("pose_solution_packed_assets_loader.js" "pose_solution_packed_assets.data" "pose_solution_wasm_bin.js" "pose_solution_wasm_bin.wasm" "pose_web.binarypb" "pose_solution_simd_wasm_bin.js"  "pose_solution_simd_wasm_bin.wasm")
 for file in "${files[@]}"; do
   curl -s https://cdn.jsdelivr.net/npm/@mediapipe/pose@${version}/${file} -o "pose@${version}/$file"
   echo "Downloaded @mediapipe/pose@${version}/${file}"
