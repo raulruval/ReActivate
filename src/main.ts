@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import WorkoutScene from './scenes/workout-scene';
 import HelloWorldScene from '~/scenes/hello-world-scene';
+import FirstWorkoutScene from './scenes/first-workout-scene';
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./service-worker.js').then((r) => console.info('Service worker registered!'));
@@ -34,7 +35,7 @@ const game = new Phaser.Game({
     },
   },
   autoFocus: true,
-  scene: [WorkoutScene, HelloWorldScene],
+  scene: [WorkoutScene, HelloWorldScene, FirstWorkoutScene],
 });
 
 export default game;
