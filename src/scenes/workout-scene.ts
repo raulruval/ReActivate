@@ -11,6 +11,7 @@ export default class WorkoutScene extends AbstractPoseTrackerScene {
     super.preload();
     this.load.image('rec', 'assets/img/rec.png');
     this.load.image('button', 'assets/img/button.png');
+    this.load.image('ball','/assets/sprites/shinyball.png');
   }
 
   private buttonTutorial;
@@ -37,19 +38,6 @@ export default class WorkoutScene extends AbstractPoseTrackerScene {
     this.add.existing(this.handPalm);
   }
 
-  makeSelection(selectedButton): any {
-    this.buttons.forEach((button) => {
-      if (button.buttomText.text == selectedButton.buttomText.text) {
-        console.log(button.buttomText.text);
-        button.animateToFill(false);
-        const buttonIsFull = button.buttonIsFull();
-        if (buttonIsFull) {
-          this.scene.start('hello-world-scene');
-        }
-      }
-    });
-  }
-
   moveHand(coords) {
     if (this.handPalm && coords) {
       this.physics.moveTo(this.handPalm, coords.x * 1280, coords.y * 720, 800);
@@ -70,7 +58,7 @@ export default class WorkoutScene extends AbstractPoseTrackerScene {
                 this.scene.start('hello-world-scene');
                 break;
               case 'Cardio':
-                console.log('Cardio');
+                this.scene.start('first-workout-scene');
                 break;
 
               default:
