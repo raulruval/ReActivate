@@ -1,17 +1,10 @@
 import AbstractPoseTrackerScene from '~/pose-tracker-engine/abstract-pose-tracker-scene';
-import Phaser from 'phaser';
-import CustomButtom from '~/objects/custom-button';
+import CustomButtom from '~/gameobjects/custom-button';
+import Constants from '~/constants';
 
-export default class WorkoutScene extends AbstractPoseTrackerScene {
+export default class Menu extends AbstractPoseTrackerScene {
   constructor() {
-    super('workout-scene');
-  }
-
-  preload(): void {
-    super.preload();
-    this.load.image('rec', 'assets/img/rec.png');
-    this.load.image('button', 'assets/img/button.png');
-    this.load.image('ball','/assets/sprites/shinyball.png');
+    super(Constants.SCENES.Menu);
   }
 
   private buttonTutorial;
@@ -51,14 +44,17 @@ export default class WorkoutScene extends AbstractPoseTrackerScene {
         this.handPalm,
         function (this) {
           button.animateToFill(false);
-           const buttonIsFull: CustomButtom = button.buttonIsFull();
+          const buttonIsFull: CustomButtom = button.buttonIsFull();
           if (buttonIsFull) {
             switch (button.getText()) {
               case 'Tutorial':
                 this.scene.start('hello-world-scene');
                 break;
               case 'Cardio':
-                this.scene.start('first-workout-scene');
+                this.scene.stop(Constants.SCENES.Menu);
+                this.scene.start(Constants.SCENES.WorkoutCardio);
+                this.scene.start(Constants.SCENES.HUD);
+                this.scene.bringToTop(Constants.SCENES.HUD);
                 break;
 
               default:
