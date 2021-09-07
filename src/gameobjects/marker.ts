@@ -27,6 +27,7 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   }
 
   public destroyMarkerAnimation(): void {
+    this.scene.sound.play('sfx');
     this.group.destroy(true,true);
     this.animationCreated = false;
   }

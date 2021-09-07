@@ -5,14 +5,16 @@ export default class CustomButtom extends Phaser.GameObjects.Container {
   private overImage: Phaser.GameObjects.Rectangle;
   private buttomText: Phaser.GameObjects.Text;
   private cancelAnimationEmpty: boolean;
-  static barWidth = 333;
+  private barWidth: number;
+  private initField: number;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, upTexture: string, inputText: string) {  
+  constructor(scene: Phaser.Scene, x: number, y: number, upTexture: string, inputText: string, barWidth?: number, initField?:number) {  
     super(scene, x, y);
 
     this.upImage = scene.add.image(0, 0, upTexture);
-
-    this.overImage = new Phaser.GameObjects.Rectangle(scene, -166.7, 0, 0, 71, 0x34495e);
+    this.barWidth = barWidth ? barWidth : 333;
+    this.initField = initField ? initField : -166.7;
+    this.overImage = new Phaser.GameObjects.Rectangle(scene, this.initField, 0, 0, 71, 0x34495e);
     this.buttomText = scene.add.text(0, 0, inputText).setOrigin(0.5).setFontSize(45).setFontFamily('Georgia');
 
     this.add(this.upImage);
@@ -32,17 +34,17 @@ export default class CustomButtom extends Phaser.GameObjects.Container {
 
   animateToFill(mouseAction: boolean): void {
     this.cancelAnimationEmpty = true;
-    if (this.overImage.width < CustomButtom.barWidth && !mouseAction) {
-      this.overImage.width = this.overImage.width + 0.02;
+    if (this.overImage.width < this.barWidth && !mouseAction) {
+      this.overImage.width = this.overImage.width + 2;
     } else if (mouseAction) {
-      this.overImage.width = CustomButtom.barWidth;
+      this.overImage.width = this.barWidth;
     }
   }
   animateToEmpty(mouseActtion: boolean): void {
     this.cancelAnimationEmpty = false;
     if (this.overImage.width > 0 && !mouseActtion) {
       while (this.overImage.width > 0 && !this.cancelAnimationEmpty) {
-        this.overImage.width = this.overImage.width - 0.01;
+        this.overImage.width = this.overImage.width - 0.5;
       }
     } else if (mouseActtion) {
       this.overImage.width = 0;
@@ -50,7 +52,7 @@ export default class CustomButtom extends Phaser.GameObjects.Container {
   }
 
   buttonIsFull(): boolean {
-    if (this.overImage.width >= CustomButtom.barWidth) {
+    if (this.overImage.width >= this.barWidth) {
       this.overImage.width = 0;
       return true;
     }

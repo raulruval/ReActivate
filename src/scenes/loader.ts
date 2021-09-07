@@ -1,5 +1,4 @@
 import Constants from '~/constants';
-import MainMenu from './menu';
 
 export default class Loader extends Phaser.Scene {
   private loadBar: Phaser.GameObjects.Graphics;
@@ -32,17 +31,20 @@ export default class Loader extends Phaser.Scene {
     this.load.on(
       'complete',
        () => {
-        this.scene.start(Constants.SCENES.Menu);
+        this.scene.start(Constants.SCENES.WorkoutCardio);
       },
       this,
     );
 
-    this.load.image('rec', 'img/rec.png');
+    this.load.image('point', 'img/point.png');
+    this.load.image('silhouette', 'img/blueSilhouette.png');
     this.load.image('button', 'img/button.png');
+    this.load.image('getReady', 'img/getReady.png');
     this.load.image('ball', 'sprites/shinyball.png');
     this.load.image('marker', 'img/marker.png');
     this.load.audio('trance', 'audio/trance.mp3');
     this.load.audio('sfx', 'audio/soundAnimation.wav');
+
     //Listener cuando se hayan cargado todos los Assets
     // this.load.on(
     //   'complete',
