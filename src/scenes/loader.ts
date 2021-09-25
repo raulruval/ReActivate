@@ -16,7 +16,7 @@ export default class Loader extends Phaser.Scene {
     //Listener mientras se cargan los assets
     this.load.on(
       'progress',
-       (value: number) => {
+      (value: number) => {
         this.progressBar.clear();
         this.progressBar.fillStyle(0x125555, 1);
         this.progressBar.fillRect(
@@ -30,20 +30,29 @@ export default class Loader extends Phaser.Scene {
     );
     this.load.on(
       'complete',
-       () => {
+      () => {
         this.scene.start(Constants.SCENES.WorkoutCardio);
+        this.scene.start(Constants.SCENES.HUD);
+        this.scene.bringToTop(Constants.SCENES.HUD);
       },
       this,
     );
 
     this.load.image('point', 'img/point.png');
+    this.load.image('hud', 'img/hud2.png');
+    this.load.image('out', 'img/out.png');
     this.load.image('silhouette', 'img/blueSilhouette.png');
     this.load.image('button', 'img/button.png');
     this.load.image('getReady', 'img/getReady.png');
-    this.load.image('ball', 'sprites/shinyball.png');
+    this.load.image('ball', 'sprites/blueBall.png');
+    this.load.image('errorBall', 'sprites/redBall.png');
     this.load.image('marker', 'img/marker.png');
+
+    // MUSIC & EFFECTS
     this.load.audio('trance', 'audio/trance.mp3');
-    this.load.audio('sfx', 'audio/soundAnimation.wav');
+    this.load.audio('sfxDestroyMarkerTouched', 'audio/soundAnimation.wav');
+    this.load.audio('sfxDestroyMarkerUntouched', 'audio/sfxDestroyMarkerUntouched.wav');
+
 
     //Listener cuando se hayan cargado todos los Assets
     // this.load.on(
