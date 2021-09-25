@@ -21,8 +21,8 @@ export default abstract class AbstractPoseTrackerScene extends Phaser.Scene {
         selfieMode: true,
         upperBodyOnly: false,
         smoothLandmarks: true,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
+        minDetectionConfidence: 0.4,
+        minTrackingConfidence: 0.4,
       },
       (results: IPoseTrackerResults) => (this.poseTrackerResults = results),
     );

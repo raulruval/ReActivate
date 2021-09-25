@@ -9,6 +9,9 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   private coordx: number;
   private coordy: number;
   private animationCreated: boolean;
+  private errorMarker: boolean = false;
+  private internalClockFps: number = 100;
+  
 
   constructor(config: any) {
     super(config.scene, config.x, config.y, config.texture, config.id);
@@ -19,25 +22,34 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
     this.animationCreated = false;
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
-    
   }
 
   update(): void {
-    if (this.animationCreated) this.playAnimation();
+    if (this.animationCreated) {
+      this.playAnimation();
+      this.internalClockFps--;
+    }
   }
 
-  public destroyMarkerAnimation(): void {
-    this.scene.sound.play('sfx');
-    this.group.destroy(true,true);
+  public destroyMarkerAnimation(touched: boolean): void {
+    if (touched && !this.errorMarker || !touched && this.errorMarker) {
+      this.scene.sound.play(Constants.MUSIC.DESTROYTOUCHED);
+    } else {
+      this.scene.sound.play(Constants.MUSIC.DESTROYUNTOUCHED);
+    }
+    this.group.destroy(true, true);
     this.animationCreated = false;
   }
 
   createAnimation(): void {
     const circle = new Phaser.Geom.Circle(this.coordx, this.coordy, 40);
-
+    this.internalClockFps = 120
     this.group = this.scene.add.group();
-
-    this.group.createMultiple({ key: 'ball', frameQuantity: 15 });
+    if (this.errorMarker) {
+      this.group.createMultiple({ key: 'errorBall', frameQuantity: 15 });
+    } else {
+      this.group.createMultiple({ key: 'ball', frameQuantity: 15 });
+    }
     Phaser.Actions.PlaceOnCircle(this.group.getChildren(), circle);
 
     /// Marker animation
@@ -69,5 +81,21 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
 
   setAnimationCreated(value: boolean): void {
     this.animationCreated = value;
+  }
+
+  setErrorMarker(errorMaker: boolean): void {
+    this.errorMarker = errorMaker;
+  }
+
+  getErrorMarker(): boolean {
+    return this.errorMarker;
+  }
+
+  getInternalClockFps(): boolean {
+    return this.internalClockFps == 0 ? true : false;
+  }
+
+  setInternalClockFps(seconds: number): void {
+    this.internalClockFps = seconds;
   }
 }

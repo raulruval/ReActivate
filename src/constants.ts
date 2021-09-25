@@ -6,6 +6,7 @@ const Constants = {
   REGISTER: {
     EXP: 'exp',
     CLOCK: 'clock',
+    LEVEL: 'level',
   },
   SCENES: {
     LOADER: 'Loader',
@@ -22,7 +23,8 @@ const Constants = {
   },
   MUSIC: {
     TRANCE: 'trance',
-    DESTROY: 'sfx',
+    DESTROYTOUCHED: 'sfxDestroyMarkerTouched',
+    DESTROYUNTOUCHED: 'sfxDestroyMarkerUntouched'
   },
 };
 

@@ -53,7 +53,7 @@ export default class Menu extends AbstractPoseTrackerScene {
                   this.scene.start(Constants.SCENES.WorkoutCardio);
                   this.scene.start(Constants.SCENES.HUD);
                   this.scene.bringToTop(Constants.SCENES.HUD);
-                  this.scene.sleep(Constants.SCENES.Menu);
+                  this.scene.stop(Constants.SCENES.Menu);
                   break;
                 default:
                   break;

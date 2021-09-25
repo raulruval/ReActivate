@@ -9,7 +9,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
   private bodyPoints: Phaser.Physics.Arcade.Sprite[] = [];
   private markers: any[] = [];
   private triggerAction: boolean = true;
-  private exp: number;
+  private exp: number = 0;
   private levelTime: number;
   private remainingTime: number;
   private timeConsumed: boolean;
@@ -19,21 +19,31 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
   private buttonsReady: any[] = [];
   private buttonReadyLeft;
   private buttonReadyRight;
-  private getReadyLeft = false;
-  private getReadyRight = false;
+  private getReadyLeft: boolean = false;
+  private getReadyRight: boolean = false;
+  private randomMarker: number = 3;
+  private buttonExitMarker;
+  private touchingButton: boolean = false;
+  /* multipleMarker y errorMarker son asignadas cada vez que es necesario crear marcadores nuevos teniendo en cuenta la probabilidad en el nivel */
+  private multipleMarkerProb = false;
+  private errorMakerProb = false;
+  private currentMarkersAlive: number = 0;
+  private maxMarkers: number = 1; // Se empieza con al menos 1 marcador
 
   constructor() {
     super(Constants.SCENES.WorkoutCardio);
   }
 
-  preload(): void {
-    super.preload();
-  }
-
   create(): void {
     super.create();
 
-    // Get ready
+    /************** Buttons Init *********/
+    this.buttonExitMarker = new CustomButtom(this, 1100, 44, 'out', '', 69, -34.5);
+    this.buttonExitMarker.setScale(0.8, 0.85);
+    this.add.existing(this.buttonExitMarker);
+    this.physics.world.enable(this.buttonExitMarker);
+    this.buttonExitMarker.body.setAllowGravity(false);
+
     this.buttonReadyLeft = new CustomButtom(this, 340, 230, 'getReady', 'I', 69, -34.5);
     this.buttonsReady.push(this.buttonReadyLeft);
 
@@ -54,18 +64,30 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
       this.bodyPoints.push(point);
     }
 
+    /*****************************************/
+
     this.audioScene = this.sound.add(Constants.MUSIC.TRANCE, { loop: true });
 
-    const testTxt: Phaser.GameObjects.Text = this.add
-      .text(30, 50, 'test', { fontSize: '32px', color: '#FFFFFF' })
-      .setInteractive();
-
-    testTxt.on('pointerdown', () => {
-      this.exp = 50;
-      this.registry.set(Constants.REGISTER.EXP, this.exp);
-      this.events.emit(Constants.EVENT.UPDATEEXP);
+    /************** Exit workout *************/
+    this.bodyPoints.forEach((point) => {
+      this.physics.add.overlap(
+        this.buttonExitMarker,
+        point,
+        function (this) {
+          this.buttonExitMarker.animateToFill(false);
+          this.touchingButton = true;
+          const buttonIsFull: CustomButtom = this.buttonExitMarker.buttonIsFull();
+          if (buttonIsFull) {
+            this.stopScene();
+          }
+        },
+        undefined,
+        this,
+      );
     });
-    // Get ready markers
+    /***************************************** */
+
+    /************** Get ready markers ******** */
     this.buttonsReady.forEach((button) => {
       this.bodyPoints.forEach((point) => {
         this.physics.add.overlap(
@@ -96,11 +118,14 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
         );
       });
     });
+    /***************************************** */
 
-    // Time control
+    /************** Time control ************** */
     this.levelTime = 1;
-    this.remainingTime = 25;
+    this.remainingTime = 125;
     this.timeConsumed = false;
+    this.registry.set(Constants.REGISTER.EXP, this.exp);
+    /***************************************** */
   }
 
   startWorkout() {
@@ -153,7 +178,8 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
           point,
           (marker: any) => {
             if (marker.getAnimationCreated()) {
-              marker.destroyMarkerAnimation();
+              marker.destroyMarkerAnimation(true);
+              this.destroyMarker(marker, true);
             }
           },
           undefined,
@@ -163,7 +189,55 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
     }
   }
 
+  stopScene() {
+    this.timeConsumed = true;
+    this.sound.stopAll();
+    this.scene.stop(Constants.SCENES.WorkoutCardio);
+    this.scene.stop(Constants.SCENES.HUD);
+    this.scene.start(Constants.SCENES.Menu);
+  }
+
+  destroyMarker(marker: any, touched: boolean): void {
+    this.currentMarkersAlive--;
+    if ((marker.getErrorMarker() && touched) || (!marker.getErrorMarker() && !touched)) {
+      if (Number(this.registry.get(Constants.REGISTER.EXP)) > 0) {
+        this.exp = Number(this.registry.get(Constants.REGISTER.EXP)) - 10;
+      }
+    } else if ((marker.getErrorMarker() && !touched) || (!marker.getErrorMarker() && touched)) {
+      this.exp = Number(this.registry.get(Constants.REGISTER.EXP)) + 10;
+    }
+    this.registry.set(Constants.REGISTER.EXP, this.exp);
+    this.events.emit(Constants.EVENT.UPDATEEXP);
+    this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
+    if (this.currentMarkersAlive == 0) {
+      let currentLevel = Number(this.registry.get(Constants.REGISTER.LEVEL))
+      this.probabilityTypesMarkers(0.25, currentLevel/10 );
+      if (this.multipleMarkerProb && currentLevel > 5){
+        this.maxMarkers = 3;
+      }else if (this.multipleMarkerProb){
+        this.maxMarkers = 2;
+      }else{
+        this.maxMarkers = 1;
+      }
+    }
+  }
+
+  probabilityTypesMarkers(probError: number, probMultiple: number) {
+    let rand = Math.random();
+    rand < probError ? (this.errorMakerProb = true) : (this.multipleMarkerProb = false);
+    rand < probMultiple ? (this.multipleMarkerProb = true) : (this.multipleMarkerProb = false);
+  }
+
+  /* ***************************************************************************** */
   update(time: number, delta: number): void {
+    if (!this.touchingButton) {
+      this.bodyPoints.forEach((point) => {
+        if (point.body && point.body.touching.none) {
+          this.buttonExitMarker.animateToEmpty(false);
+        }
+      });
+    }
+    this.touchingButton = false;
     super.update(time, delta, {
       renderElementsSettings: {
         shouldDrawFrame: true,
@@ -174,18 +248,36 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
       },
       afterPaint: (poseTrackerResults) => {},
     });
-
+    /****************************************************************************** */
     if (this.workoutStarted) {
       this.markers.forEach((marker) => {
-        if (marker.id == 2) {
-          if (marker.animationCreated) {
-            marker.update();
-          } else {
-            if (this.triggerAction) marker.createAnimation();
+        if (marker.getAnimationCreated()) {
+          // Si tiene animación actualizala.
+          marker.update();
+        }
+
+        /* Lógica para crear los marcadores */
+        if (marker.id == this.randomMarker) {
+          if (!marker.getAnimationCreated() && this.triggerAction && this.currentMarkersAlive < this.maxMarkers) {
+            marker.setErrorMarker(this.errorMakerProb);
+            if (this.errorMakerProb) {
+              this.errorMakerProb = false;
+            }
+            marker.createAnimation();
+            this.currentMarkersAlive++;
+            this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
           }
         }
+        if (marker.getInternalClockFps() && marker.getAnimationCreated()) {
+          marker.destroyMarkerAnimation(false);
+          this.destroyMarker(marker, false);
+        }
       });
+
       this.triggerAction = false;
+      if (this.currentMarkersAlive == 0) {
+        this.triggerAction = true;
+      }
 
       // Time Management
       if (this.levelTime != Math.floor(Math.abs(time / 1000)) && !this.timeConsumed) {
@@ -204,11 +296,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
 
         // End of workout
         if (this.remainingTime == 0) {
-          this.timeConsumed = true;
-          this.sound.stopAll();
-          this.scene.stop(Constants.SCENES.WorkoutCardio);
-          this.scene.stop(Constants.SCENES.HUD);
-          this.scene.wake(Constants.SCENES.Menu);
+          this.stopScene();
         }
       }
     }
