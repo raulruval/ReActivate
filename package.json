@@ -4,6 +4,7 @@
   "private": true,
   "homepage": ".",
   "scripts": {
+    "deploy": "gh-pages -d esbuild.prod.js",
     "check": "tsc --noEmit --project tsconfig.json",
     "start": "node esbuild.dev.js",
     "build": "node esbuild.prod.js",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@mediapipe/drawing_utils": "^0.2.1617146986",
     "@mediapipe/pose": "0.2.1617147663",
+    "gh-pages": "^3.2.3",
     "phaser": "^3.54.0"
   },
   "devDependencies": {
