@@ -57,7 +57,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
     });
     this.silhouetteImage = this.add.image(640, 420, 'silhouette');
     this.silhouetteImage.setScale(0.7, 0.65);
-
+    // body points
     for (var i = 0; i < 33; i++) {
       let point = this.physics.add.sprite(-20, -20, 'point');
       this.add.existing(point);
@@ -122,10 +122,19 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
 
     /************** Time control ************** */
     this.levelTime = 1;
-    this.remainingTime = 125;
+    this.remainingTime = 8*60;
     this.timeConsumed = false;
     this.registry.set(Constants.REGISTER.EXP, this.exp);
     /***************************************** */
+
+    this.events.on(
+      Phaser.Scenes.Events.WAKE,
+      () => {
+        this.scene.switch(Constants.SCENES.WorkoutCardio);
+      },
+      this,
+    );
+
   }
 
   startWorkout() {
@@ -192,26 +201,25 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
   stopScene() {
     this.timeConsumed = true;
     this.sound.stopAll();
-    this.scene.stop(Constants.SCENES.WorkoutCardio);
-    this.scene.stop(Constants.SCENES.HUD);
-    this.scene.start(Constants.SCENES.Menu);
+    this.scene.switch(Constants.SCENES.Menu);
   }
 
   destroyMarker(marker: any, touched: boolean): void {
     this.currentMarkersAlive--;
+    this.exp = Number(this.registry.get(Constants.REGISTER.EXP));
     if ((marker.getErrorMarker() && touched) || (!marker.getErrorMarker() && !touched)) {
       if (Number(this.registry.get(Constants.REGISTER.EXP)) > 0) {
-        this.exp = Number(this.registry.get(Constants.REGISTER.EXP)) - 10;
+        this.exp = this.exp - 10;
       }
     } else if ((marker.getErrorMarker() && !touched) || (!marker.getErrorMarker() && touched)) {
-      this.exp = Number(this.registry.get(Constants.REGISTER.EXP)) + 10;
+      this.exp = this.exp + 10;
     }
     this.registry.set(Constants.REGISTER.EXP, this.exp);
     this.events.emit(Constants.EVENT.UPDATEEXP);
     this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
     if (this.currentMarkersAlive == 0) {
       let currentLevel = Number(this.registry.get(Constants.REGISTER.LEVEL))
-      this.probabilityTypesMarkers(0.25, currentLevel/10 );
+      this.probabilityTypesMarkers(0.15, currentLevel/10 );
       if (this.multipleMarkerProb && currentLevel > 5){
         this.maxMarkers = 3;
       }else if (this.multipleMarkerProb){
@@ -224,7 +232,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
 
   probabilityTypesMarkers(probError: number, probMultiple: number) {
     let rand = Math.random();
-    rand < probError ? (this.errorMakerProb = true) : (this.multipleMarkerProb = false);
+    rand < probError ? (this.errorMakerProb = true) : (this.errorMakerProb = false);
     rand < probMultiple ? (this.multipleMarkerProb = true) : (this.multipleMarkerProb = false);
   }
 

@@ -24,16 +24,29 @@ export default class HUD extends Phaser.Scene {
 
     workout.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
     workout.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+
     this.hudImage = this.add.image(400, 37, 'hud');
     this.hudImage.setScale(0.9, 0.85);
 
-    this.expTxt = this.add.text(44, 21, '0', { fontSize: '45px', color: '#FFFFFF' });
-    this.clockTxt = this.add.text(this.width / 2 - 20, 23, '10:00', { fontSize: '45px', color: '#FFFFFF' });
+    this.expTxt = this.add.text(32, 14, '1', {
+      fontFamily: 'Russo One',
+      fontSize: '45px',
+      color: '#FFFFFF',
+      fontStyle: 'normal',
+    });
+    this.clockTxt = this.add.text(this.width / 2 - 48.5, 14, '08:00', {
+      fontFamily: 'Russo One',
+      fontSize: '43px',
+      color: '#FFFFFF',
+      fontStyle: 'normal',
+    });
     this.expBarGraphic = this.add.graphics();
   }
 
   private updateExp(): void {
-    this.expTxt.text = this.level.toString();
+    if (parseInt(this.expTxt.text) > 9) {
+      this.expTxt.x = 25;
+    }
     this.tweens.addCounter({
       from: this.lastExp,
       to: this.registry.get(Constants.REGISTER.EXP),
@@ -48,19 +61,21 @@ export default class HUD extends Phaser.Scene {
   }
 
   private setExpBar(value: number) {
-    const width = 493;
+    const width = 450;
     const percent = Phaser.Math.Clamp(value, 0, 100) / 100;
     if (percent >= 0) {
       this.expBarGraphic.clear();
       this.expBarGraphic.fillStyle(0x00ff00, 0.8);
       this.expBarGraphic.fillRect(91, 33.5, width * percent, 11.5);
     }
-    if (value == 100) {
-      this.level++;
-      this.registry.set(Constants.REGISTER.LEVEL, this.level);
+    if (Number(this.registry.get(Constants.REGISTER.EXP)) == 100) {
+      this.level = this.level + 1;
       this.registry.set(Constants.REGISTER.EXP, 0);
       this.events.emit(Constants.EVENT.UPDATEEXP);
       this.lastExp = 0;
+      this.registry.set(Constants.REGISTER.LEVEL, this.level);
+      this.expTxt.text = this.level.toString();
+      this.updateExp();
     }
   }
 

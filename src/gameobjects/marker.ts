@@ -10,7 +10,7 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   private coordy: number;
   private animationCreated: boolean;
   private errorMarker: boolean = false;
-  private internalClockFps: number = 100;
+  private internalClockFps: number = 90;
   
 
   constructor(config: any) {
@@ -85,6 +85,7 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
 
   setErrorMarker(errorMaker: boolean): void {
     this.errorMarker = errorMaker;
+    this.internalClockFps = 40;
   }
 
   getErrorMarker(): boolean {

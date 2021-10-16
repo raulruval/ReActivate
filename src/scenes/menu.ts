@@ -50,10 +50,9 @@ export default class Menu extends AbstractPoseTrackerScene {
                   this.scene.start('hello-world-scene');
                   break;
                 case 'Cardio':
-                  this.scene.start(Constants.SCENES.WorkoutCardio);
-                  this.scene.start(Constants.SCENES.HUD);
+                  this.scene.switch(Constants.SCENES.WorkoutCardio);
+                  this.scene.switch(Constants.SCENES.HUD);
                   this.scene.bringToTop(Constants.SCENES.HUD);
-                  this.scene.stop(Constants.SCENES.Menu);
                   break;
                 default:
                   break;
@@ -65,6 +64,13 @@ export default class Menu extends AbstractPoseTrackerScene {
         );
       });
     });
+    this.events.on(
+      Phaser.Scenes.Events.WAKE,
+      () => {
+        this.scene.switch(Constants.SCENES.Menu);
+      },
+      this,
+    );
   }
 
   movePoints(coords: IPoseLandmark[] | undefined) {
