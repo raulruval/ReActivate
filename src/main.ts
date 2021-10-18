@@ -1,25 +1,12 @@
 import Phaser from 'phaser';
 import MainMenu from './scenes/menu';
-import HelloWorldScene from '~/scenes/hello-world-scene';
-import Workout from './scenes/workout-cardio';
+import WorkoutAgilidad from '~/scenes/workout-agilidad';
 import Loader from './scenes/loader';
 import HUD from './scenes/hud';
+import WorkoutCardio from './scenes/workout-cardio';
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./service-worker.js').then((r) => console.info('Service worker registered!'));
-}
-
-if (!('Notification' in window)) {
-  console.warn('This browser does not support desktop notification');
-} else if (Notification.permission !== 'granted') {
-  Notification.requestPermission().then((permission) => {
-    if (permission === 'granted') {
-      new Notification('Physio Galenus', {
-        body: 'Thank you for accepting being notified 🙂',
-        icon: 'assets/img/icons/icon-512.png',
-      });
-    }
-  });
 }
 
 const game = new Phaser.Game({
@@ -37,7 +24,7 @@ const game = new Phaser.Game({
     },
   },
   autoFocus: true,
-  scene: [Loader, MainMenu, Workout, HelloWorldScene, HUD],
+  scene: [Loader, MainMenu, WorkoutCardio, WorkoutAgilidad, HUD],
 });
 
 export default game;

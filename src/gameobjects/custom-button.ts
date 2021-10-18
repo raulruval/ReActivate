@@ -8,14 +8,25 @@ export default class CustomButtom extends Phaser.GameObjects.Container {
   private barWidth: number;
   private initField: number;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, upTexture: string, inputText: string, barWidth?: number, initField?:number) {  
+
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    upTexture: string,
+    inputText: string,
+    barWidth?: number,
+    initField?: number,
+  ) {
     super(scene, x, y);
 
     this.upImage = scene.add.image(0, 0, upTexture);
     this.barWidth = barWidth ? barWidth : 333;
     this.initField = initField ? initField : -166.7;
     this.overImage = new Phaser.GameObjects.Rectangle(scene, this.initField, 0, 0, 71, 0x34495e);
-    this.buttomText = scene.add.text(0, 0, inputText).setOrigin(0.5).setFontSize(45).setFontFamily('Georgia');
+    this.buttomText = scene.add
+      .text(0, 0, inputText, { fontFamily: 'Russo One', fontSize: '55px', color: '#FFFFFF', fontStyle: 'normal' })
+      .setOrigin(0.5);
 
     this.add(this.upImage);
     this.add(this.overImage);
@@ -62,5 +73,4 @@ export default class CustomButtom extends Phaser.GameObjects.Container {
   getText(): string {
     return this.buttomText.text;
   }
-
 }
