@@ -51,6 +51,9 @@ export default class Loader extends Phaser.Scene {
         // this.scene.start(Constants.SCENES.WorkoutCardio);
         // this.scene.start(Constants.SCENES.HUD);
         // this.scene.bringToTop(Constants.SCENES.HUD);
+        // this.scene.start(Constants.SCENES.WorkoutAgilidad);
+        // this.scene.start(Constants.SCENES.HUD);
+        // this.scene.bringToTop(Constants.SCENES.HUD);
       },
       this,
     );
@@ -64,6 +67,11 @@ export default class Loader extends Phaser.Scene {
     this.load.image('ball', 'sprites/blueBall.png');
     this.load.image('errorBall', 'sprites/redBall.png');
     this.load.image('marker', 'img/marker.png');
+    this.load.image('transparentMarker', 'img/transparentMarker.png');
+    this.load.image('room', 'img/room.png');
+    this.load.image('logo', 'img/koala.png');
+    this.load.image('particle-red', 'img/particle-red.png');
+
 
     // MUSIC & EFFECTS
     this.load.audio('trance', 'audio/trance.mp3');

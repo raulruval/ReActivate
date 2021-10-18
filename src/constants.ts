@@ -12,10 +12,18 @@ const Constants = {
     LOADER: 'Loader',
     Menu: 'Menu',
     WorkoutCardio: 'WorkoutCardio',
+    WorkoutAgilidad: 'WorkoutAgilidad',
     HUD: 'HUD',
   },
   MARKER: {
     ID: 'marker',
+    ANIMATION: {
+      WAIT: 'idle',
+      TOUCHED: 'touched',
+    },
+  },
+  TRANSPARENTMARKER: {
+    ID: 'transparentMarker',
     ANIMATION: {
       WAIT: 'idle',
       TOUCHED: 'touched',

@@ -4,6 +4,7 @@
   "private": true,
   "homepage": ".",
   "scripts": {
+    "deploy": "gh-pages -d public",
     "check": "tsc --noEmit --project tsconfig.json",
     "start": "node esbuild.dev.js",
     "build": "node esbuild.prod.js",

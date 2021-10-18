@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
 import MainMenu from './scenes/menu';
-import HelloWorldScene from '~/scenes/hello-world-scene';
-import Workout from './scenes/workout-cardio';
+import WorkoutAgilidad from '~/scenes/workout-agilidad';
 import Loader from './scenes/loader';
 import HUD from './scenes/hud';
+import WorkoutCardio from './scenes/workout-cardio';
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./service-worker.js').then((r) => console.info('Service worker registered!'));
@@ -24,7 +24,7 @@ const game = new Phaser.Game({
     },
   },
   autoFocus: true,
-  scene: [Loader, MainMenu, Workout, HelloWorldScene, HUD],
+  scene: [Loader, MainMenu, WorkoutCardio, WorkoutAgilidad, HUD],
 });
 
 export default game;

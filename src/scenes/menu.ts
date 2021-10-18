@@ -10,6 +10,7 @@ export default class Menu extends AbstractPoseTrackerScene {
 
   private buttonTutorial;
   private buttonExercise1;
+  private buttonExercise2;
   private bodyPoints: Phaser.Physics.Arcade.Sprite[] = [];
   private buttons: any[] = [];
   private touchingButton: boolean = false;
@@ -17,11 +18,17 @@ export default class Menu extends AbstractPoseTrackerScene {
   create(): void {
     super.create();
 
-    this.buttonTutorial = new CustomButtom(this, 200, 200, 'button', 'Tutorial');
+    this.add.image(1280/2,720/2,"room");
+
+    this.buttonTutorial = new CustomButtom(this, 250, 220, 'button', 'Tutorial');
     this.buttons.push(this.buttonTutorial);
 
-    this.buttonExercise1 = new CustomButtom(this, 200, 350, 'button', 'Cardio');
+    this.buttonExercise1 = new CustomButtom(this, 645, 220, 'button', 'Cardio');
     this.buttons.push(this.buttonExercise1);
+
+    this.buttonExercise2 = new CustomButtom(this, 1042, 220, 'button', 'Agilidad');
+    this.buttons.push(this.buttonExercise2);
+
 
     this.buttons.forEach((button) => {
       this.add.existing(button);
@@ -29,7 +36,7 @@ export default class Menu extends AbstractPoseTrackerScene {
       button.body.setAllowGravity(false);
     });
 
-    for (var i = 0; i < 33; i++) {
+    for (var i = 0; i < 22; i++) {
       let point = this.physics.add.sprite(-20, -20, 'point');
       this.add.existing(point);
       this.bodyPoints.push(point);
@@ -47,11 +54,16 @@ export default class Menu extends AbstractPoseTrackerScene {
             if (buttonIsFull) {
               switch (button.getText()) {
                 case 'Tutorial':
-                  this.scene.start('hello-world-scene');
+                 
                   break;
                 case 'Cardio':
-                  this.scene.switch(Constants.SCENES.WorkoutCardio);
-                  this.scene.switch(Constants.SCENES.HUD);
+                  this.scene.start(Constants.SCENES.WorkoutCardio);
+                  this.scene.start(Constants.SCENES.HUD);
+                  this.scene.bringToTop(Constants.SCENES.HUD);
+                  break;
+                case 'Agilidad':
+                  this.scene.start(Constants.SCENES.WorkoutAgilidad);
+                  this.scene.start(Constants.SCENES.HUD);
                   this.scene.bringToTop(Constants.SCENES.HUD);
                   break;
                 default:
@@ -64,19 +76,13 @@ export default class Menu extends AbstractPoseTrackerScene {
         );
       });
     });
-    this.events.on(
-      Phaser.Scenes.Events.WAKE,
-      () => {
-        this.scene.switch(Constants.SCENES.Menu);
-      },
-      this,
-    );
+
   }
 
   movePoints(coords: IPoseLandmark[] | undefined) {
     if (this.bodyPoints && coords) {
-      for (var i = 0; i < coords.length; i++) {
-        this.bodyPoints[i].setPosition(coords[i].x * 1280, coords[i].y * 720);
+      for (var i = 0; i < this.bodyPoints.length; i++) {
+        this.bodyPoints[i].setPosition(coords[i + 11].x * 1280, coords[i + 11].y * 720);
       }
     }
   }
