@@ -47,7 +47,7 @@ export default class Loader extends Phaser.Scene {
     this.load.on(
       'complete',
       () => {
-        this.scene.start(Constants.SCENES.Menu);
+         this.scene.start(Constants.SCENES.Menu);
         // this.scene.start(Constants.SCENES.WorkoutCardio);
         // this.scene.start(Constants.SCENES.HUD);
         // this.scene.bringToTop(Constants.SCENES.HUD);
@@ -63,20 +63,29 @@ export default class Loader extends Phaser.Scene {
     this.load.image('out', 'img/out.png');
     this.load.image('silhouette', 'img/blueSilhouette.png');
     this.load.image('button', 'img/button.png');
-    this.load.image('getReady', 'img/getReady.png');
-    this.load.image('ball', 'sprites/blueBall.png');
-    this.load.image('errorBall', 'sprites/redBall.png');
+    this.load.image('getReady', 'img/out.png');
+    this.load.image('blueBall', 'img/blueBall.png');
+    this.load.image('errorBall', 'img/errorBall.png');
     this.load.image('marker', 'img/marker.png');
     this.load.image('transparentMarker', 'img/transparentMarker.png');
     this.load.image('room', 'img/room.png');
-    this.load.image('logo', 'img/koala.png');
-    this.load.image('particle-red', 'img/particle-red.png');
+    this.load.image('ball', 'img/koala.png');
+    this.load.image('meteorite', 'img/meteorite.png');
+    this.load.image('particle-red', 'particles/particle-red.png');
+    this.load.image('particle-orange', 'particles/particle-orange.png');
 
 
     // MUSIC & EFFECTS
     this.load.audio('trance', 'audio/trance.mp3');
+    this.load.audio('trance2', 'audio/trance2.mp3');
     this.load.audio('sfxDestroyMarkerTouched', 'audio/soundAnimation.wav');
     this.load.audio('sfxDestroyMarkerUntouched', 'audio/sfxDestroyMarkerUntouched.wav');
+    this.load.audio('contactError', 'audio/contactError.wav');
+
+    // Data
+
+    this.load.json('jsonDataRanking', 'assets/data/ranking.json');
+
 
     //Listener cuando se hayan cargado todos los Assets
     // this.load.on(

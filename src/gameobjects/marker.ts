@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import Constants from '~/constants';
 
 export default class Marker extends Phaser.Physics.Arcade.Sprite {
-  private group!: Phaser.GameObjects.Group;
+  private ball: Phaser.GameObjects.Sprite;
   private tween!: Phaser.Tweens.Tween;
   private id: number;
   scene: Phaser.Scene;
@@ -27,7 +27,8 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
 
   update(): void {
     if (this.animationCreated) {
-      this.playAnimation();
+      this.ball.angle += 0.5;
+      this.ball.scale -= 0.0002;
     }
   }
 
@@ -38,32 +39,31 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
       this.scene.sound.play(Constants.MUSIC.DESTROYUNTOUCHED);
     }
     this.timerEvent.remove(false);
-    this.group.destroy(true, true);
+    // this.group.destroy(true, true);
+    this.ball.destroy();
     this.internalTimerConsumed = false;
     this.animationCreated = false;
   }
 
   createAnimation(currentLevel: number): void {
-    const circle = new Phaser.Geom.Circle(this.coordx, this.coordy, 30);
-
-    this.group = this.scene.add.group();
     if (this.errorMarker) {
-      this.group.createMultiple({ key: 'errorBall', frameQuantity: 15 });
+      this.ball = this.scene.add.sprite(this.coordx, this.coordy, 'errorBall');
     } else {
-      this.group.createMultiple({ key: 'ball', frameQuantity: 15 });
+      this.ball = this.scene.add.sprite(this.coordx, this.coordy, 'blueBall');
     }
-    Phaser.Actions.PlaceOnCircle(this.group.getChildren(), circle);
+    this.ball.setScale(0.11);
 
-    /// Marker animation
-    this.tween = this.scene.tweens.addCounter({
-      from: 30,
-      to: 0,
-      duration: 4500,
-      delay: 700,
-      ease: 'Expo.easeIn',
-      repeat: -1,
-      yoyo: true,
-    });
+    // /// Marker animation
+    // this.tween = this.scene.tweens.add({
+    //   targets: this.ball,
+    //   from: 30,
+    //   to: 0,
+    //   duration: 4500,
+    //   delay: 700,
+    //   ease: 'Expo.easeIn',
+    //   yoyo: true,
+    // });
+
     let timerForMarker = 5500;
     if (currentLevel < 10) {
       timerForMarker = timerForMarker - (currentLevel * 100);
@@ -76,15 +76,6 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
     });
 
     this.animationCreated = true;
-  }
-
-  playAnimation(): void {
-    Phaser.Actions.RotateAroundDistance(
-      this.group.getChildren(),
-      { x: this.coordx, y: this.coordy },
-      0.005,
-      this.tween.getValue(),
-    );
   }
 
   getAnimationCreated(): boolean {

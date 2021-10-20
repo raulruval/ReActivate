@@ -31,9 +31,16 @@ const Constants = {
   },
   MUSIC: {
     TRANCE: 'trance',
+    TRANCE2: 'trance2',
     DESTROYTOUCHED: 'sfxDestroyMarkerTouched',
-    DESTROYUNTOUCHED: 'sfxDestroyMarkerUntouched'
+    DESTROYUNTOUCHED: 'sfxDestroyMarkerUntouched',
+    CONTACTERROR: 'contactError'
   },
+
+  DATA: {
+    RANKING: 'ranking',
+    STATS: 'stats'
+  }
 };
 
 export default Constants;

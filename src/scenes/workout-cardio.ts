@@ -30,25 +30,34 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
   private currentMarkersAlive: number = 0;
   private maxMarkers: number = 1; // Se empieza con al menos 1 marcador
   private currentLevel: number;
-
+  private width: number;
+  private height: number;
+  
   constructor() {
     super(Constants.SCENES.WorkoutCardio);
+  }
+
+  init() {
+    this.width = this.cameras.main.width;
+    this.height = this.cameras.main.height;
   }
 
   create(): void {
     super.create();
 
     /************** Buttons Init *********/
-    this.buttonExitMarker = new CustomButtom(this, 1100, 44, 'out', '', 69, -34.5);
-    this.buttonExitMarker.setScale(0.8, 0.85);
+    this.buttonExitMarker = new CustomButtom(this, 1200, 52, 'out', '[➔', 95, -48);
+    this.buttonExitMarker.setScale(0.9, 0.85);
     this.add.existing(this.buttonExitMarker);
     this.physics.world.enable(this.buttonExitMarker);
     this.buttonExitMarker.body.setAllowGravity(false);
 
-    this.buttonReadyLeft = new CustomButtom(this, 340, 230, 'getReady', 'I', 69, -34.5);
+    this.buttonReadyLeft = new CustomButtom(this, 340, 230, 'getReady', 'I', 95, -48);
+    this.buttonReadyLeft.setScale(0.9, 0.85);
     this.buttonsReady.push(this.buttonReadyLeft);
 
-    this.buttonReadyRight = new CustomButtom(this, 940, 230, 'getReady', 'D', 69, -34.5);
+    this.buttonReadyRight = new CustomButtom(this, 940, 230, 'getReady', 'D', 95,-48);
+    this.buttonReadyRight.setScale(0.9, 0.85);
     this.buttonsReady.push(this.buttonReadyRight);
 
     this.buttonsReady.forEach((button) => {
@@ -150,10 +159,12 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
   }
 
   createLayout(): void {
-    let width: number = 50;
+    let width: number = 225;
     let height: number = 150;
-
-    for (var i = 1; i < 26; i++) {
+    let shortRow: boolean = true;
+    let counterRow = 0;
+    let triggerChangeRow: boolean = false;
+    for (var i = 1; i < 15; i++) {
       const marker = new Marker({
         scene: this,
         x: width,
@@ -161,17 +172,36 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
         texture: Constants.MARKER.ID,
         id: i,
       });
-
-      if (i % 6 == 0) {
-        height = height + 170;
-        width = 50;
-      } else {
-        if (i % 3 == 0) {
-          width = width + 660;
+      counterRow++;
+      if (shortRow) {
+        if (counterRow == 2) {
+          height = height + 125;
+          width = 100;
+          triggerChangeRow = true;
+          counterRow = 0;
         } else {
-          width = width + 130; // 50 + 130 * 3 = 440
+          width = width + 830;
         }
       }
+      if (!shortRow) {
+        if (counterRow == 4) {
+          height = height + 125;
+          width = 225;
+          triggerChangeRow = true;
+          counterRow = 0;
+        } else {
+          if (i % 2 == 0) {
+            width = width + 580;
+          } else {
+            width = width + 250;
+          }
+        }
+      }
+      if (triggerChangeRow) {
+        shortRow = !shortRow;
+        triggerChangeRow = false;
+      }
+
 
       this.markers.push(marker);
       this.bodyPoints.forEach((point) => {
@@ -193,9 +223,6 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
 
   stopScene() {
     this.timeConsumed = true;
-    this.sound.stopAll();
-    this.scene.stop(Constants.SCENES.WorkoutCardio);
-    this.scene.stop(Constants.SCENES.HUD);
     this.scene.start(Constants.SCENES.Menu);
   }
 
@@ -213,7 +240,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
     this.events.emit(Constants.EVENT.UPDATEEXP);
 
     // Update variables for next markers
-    this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
+    this.randomMarker = Math.floor(Math.random() * (14 - 1 + 1)) + 1;
     if (this.currentMarkersAlive == 0) {
       this.currentLevel = Number(this.registry.get(Constants.REGISTER.LEVEL))
       this.probabilityTypesMarkers(0.15, this.currentLevel / 10);
