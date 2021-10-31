@@ -34,30 +34,23 @@ export default class CustomButtom extends Phaser.GameObjects.Container {
 
     this.setSize(this.upImage.width, this.upImage.height);
 
-    this.setInteractive()
-      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-        this.animateToFill(true);
-      })
-      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-        this.animateToEmpty(true);
-      });
   }
 
   animateToFill(mouseAction: boolean): void {
     this.cancelAnimationEmpty = true;
-    if (this.overImage.width < this.barWidth && !mouseAction) {
+    if ((this.overImage.width < this.barWidth) && (mouseAction === false)) {
       this.overImage.width = this.overImage.width + 2;
     } else if (mouseAction) {
       this.overImage.width = this.barWidth;
     }
   }
-  animateToEmpty(mouseActtion: boolean): void {
+  animateToEmpty(mouseAction: boolean): void {
     this.cancelAnimationEmpty = false;
-    if (this.overImage.width > 0 && !mouseActtion) {
+    if ((this.overImage.width > 0) && (mouseAction === false)) {
       while (this.overImage.width > 0 && !this.cancelAnimationEmpty) {
         this.overImage.width = this.overImage.width - 0.5;
       }
-    } else if (mouseActtion) {
+    } else if (mouseAction) {
       this.overImage.width = 0;
     }
   }

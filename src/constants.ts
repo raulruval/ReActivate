@@ -14,6 +14,7 @@ const Constants = {
     WorkoutCardio: 'WorkoutCardio',
     WorkoutAgilidad: 'WorkoutAgilidad',
     HUD: 'HUD',
+    STATS: 'STATS',
   },
   MARKER: {
     ID: 'marker',

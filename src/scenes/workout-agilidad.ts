@@ -226,7 +226,7 @@ export default class WorkoutAgilidad extends AbstractPoseTrackerScene {
   movePoints(coords: IPoseLandmark[] | undefined) {
     if (this.bodyPoints && coords) {
       for (var i = 0; i < this.bodyPoints.length; i++) {
-        this.bodyPoints[i].setPosition(coords[i].x * 1280, coords[i].y * 720);
+        this.bodyPoints[i]?.setPosition(coords[i]?.x * 1280, coords[i]?.y * 720);
       }
     }
   }

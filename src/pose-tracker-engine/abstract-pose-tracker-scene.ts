@@ -47,17 +47,18 @@ export default abstract class AbstractPoseTrackerScene extends Phaser.Scene {
     if (!this.poseTrackerResults) {
       return;
     }
+    if (this.poseTrackerCanvasTexture && this.poseTrackerCanvasTexture.context) {
+      this.poseTracker.drawResults(
+        this.poseTrackerCanvasTexture.context,
+        this.poseTrackerResults,
+        onPoseTrackerResultsUpdate?.renderElementsSettings,
+      );
 
-    this.poseTracker.drawResults(
-      this.poseTrackerCanvasTexture.context,
-      this.poseTrackerResults,
-      onPoseTrackerResultsUpdate?.renderElementsSettings,
-    );
 
-    onPoseTrackerResultsUpdate?.beforePaint(this.poseTrackerResults, this.poseTrackerCanvasTexture);
-    this.poseTrackerCanvasTexture.refresh();
-    onPoseTrackerResultsUpdate?.afterPaint(this.poseTrackerResults);
-
+      onPoseTrackerResultsUpdate?.beforePaint(this.poseTrackerResults, this.poseTrackerCanvasTexture);
+      this.poseTrackerCanvasTexture.refresh();
+      onPoseTrackerResultsUpdate?.afterPaint(this.poseTrackerResults);
+    }
     // Set it to undefined to not draw anything again until new pose tracker results are obtained
     this.poseTrackerResults = undefined;
   }

@@ -2,6 +2,7 @@ import AbstractPoseTrackerScene from '~/pose-tracker-engine/abstract-pose-tracke
 import CustomButtom from '~/gameobjects/custom-button';
 import Constants from '~/constants';
 import { IPoseLandmark } from '~/pose-tracker-engine/types/pose-landmark.interface';
+import Utils from '~/utils';
 
 export default class Menu extends AbstractPoseTrackerScene {
   constructor() {
@@ -18,7 +19,7 @@ export default class Menu extends AbstractPoseTrackerScene {
   private buttonLeft;
   private background;
 
-  private bodyPoints: Phaser.Physics.Arcade.Sprite[] = [];
+  private bodyPoints: any = [];
   private buttons: any[] = [];
   private touchingButton: boolean = false;
 
@@ -68,7 +69,27 @@ export default class Menu extends AbstractPoseTrackerScene {
       this.bodyPoints.push(point);
     }
 
+
+
     this.buttons.forEach((button) => {
+      if (button) {
+        button.setInteractive()
+          .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+            button.animateToFill(true);
+          })
+          .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+            button.animateToEmpty(true);
+          })
+          .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+            button.animateToFill(true);
+            this.touchingButton = true;
+            const buttonIsFull: CustomButtom = button.buttonIsFull();
+            if (buttonIsFull) {
+              this.menuSwitch(button);
+            }
+          }
+          );
+      }
       this.bodyPoints.forEach((point) => {
         this.physics.add.overlap(
           button,
@@ -76,74 +97,9 @@ export default class Menu extends AbstractPoseTrackerScene {
           function (this) {
             button.animateToFill(false);
             this.touchingButton = true;
-            const buttonIsFull: CustomButtom = button.buttonIsFull();
+            const buttonIsFull = button.buttonIsFull();
             if (buttonIsFull) {
-              switch (button.getText()) {
-                case 'Tutorial':
-
-                  break;
-                case 'Cardio':
-                  this.scene.start(Constants.SCENES.WorkoutCardio);
-                  this.scene.start(Constants.SCENES.HUD);
-                  this.scene.bringToTop(Constants.SCENES.HUD);
-                  break;
-                case 'Agilidad':
-                  this.scene.start(Constants.SCENES.WorkoutAgilidad);
-                  this.scene.start(Constants.SCENES.HUD);
-                  this.scene.bringToTop(Constants.SCENES.HUD);
-                  break;
-                case '►':
-                  this.tweens.add({
-                    targets: this.background,
-                    x: 0,
-                    duration: 3000,
-                    ease: 'Power2',
-                    completeDelay: 3000
-                  });
-
-                  this.buttonRight.setVisible(false);
-                  this.buttonTutorial.setVisible(false);
-                  this.buttonExercise1.setVisible(false);
-                  this.buttonExercise2.setVisible(false);
-                  this.buttonLeft.setVisible(true);
-                  this.buttonExercise3.setVisible(true);
-                  this.buttonRanking.setVisible(true);
-                  this.buttonStats.setVisible(true);
-                  // this.time.addEvent({
-                  //   delay: 2500,
-                  //   callback: () => {
-
-                  //   },
-                  //   loop: true
-                  // })
-
-                //   this.tweens.add({
-                //     targets: endScreen,
-                //     duration: 500,
-                //     alpha: 1
-                // });
-
-                  break;
-                case '◄':
-                  this.tweens.add({
-                    targets: this.background,
-                    x: 1280,
-                    duration: 3000,
-                    ease: 'Power2',
-                    completeDelay: 3000
-                  });
-                  this.buttonTutorial.setVisible(true);
-                  this.buttonExercise1.setVisible(true);
-                  this.buttonExercise2.setVisible(true);
-                  this.buttonLeft.setVisible(false);
-                  this.buttonRight.setVisible(true);
-                  this.buttonExercise3.setVisible(false);
-                  this.buttonRanking.setVisible(false);
-                  this.buttonStats.setVisible(false);
-                  break;
-                default:
-                  break;
-              }
+              this.menuSwitch(button);
             }
           },
           undefined,
@@ -152,6 +108,82 @@ export default class Menu extends AbstractPoseTrackerScene {
       });
     });
 
+  }
+
+  menuSwitch(button: CustomButtom) {
+    switch (button.getText()) {
+      case 'Tutorial':
+
+        break;
+      case 'Cardio':
+        this.scene.start(Constants.SCENES.WorkoutCardio);
+        this.scene.start(Constants.SCENES.HUD);
+        this.scene.bringToTop(Constants.SCENES.HUD);
+        this.scene.remove(Constants.SCENES.Menu)
+        break;
+      case 'Agilidad':
+        this.scene.start(Constants.SCENES.WorkoutAgilidad);
+        this.scene.start(Constants.SCENES.HUD);
+        this.scene.bringToTop(Constants.SCENES.HUD);
+        this.scene.remove(Constants.SCENES.Menu)
+        break;
+      case 'Stats':
+        var test = Utils.getMaxStatFromStorage("cardio");
+        this.scene.bringToTop(Constants.SCENES.STATS);
+        console.log(test);
+        break;
+      case '►':
+        this.tweens.add({
+          targets: this.background,
+          x: 0,
+          duration: 3000,
+          ease: 'Power2',
+          completeDelay: 3000
+        });
+
+        this.buttonRight.setVisible(false);
+        this.buttonTutorial.setVisible(false);
+        this.buttonExercise1.setVisible(false);
+        this.buttonExercise2.setVisible(false);
+        this.buttonLeft.setVisible(true);
+        this.buttonExercise3.setVisible(true);
+        this.buttonRanking.setVisible(true);
+        this.buttonStats.setVisible(true);
+        // this.time.addEvent({
+        //   delay: 2500,
+        //   callback: () => {
+
+        //   },
+        //   loop: true
+        // })
+
+        //   this.tweens.add({
+        //     targets: endScreen,
+        //     duration: 500,
+        //     alpha: 1
+        // });
+
+        break;
+      case '◄':
+        this.tweens.add({
+          targets: this.background,
+          x: 1280,
+          duration: 3000,
+          ease: 'Power2',
+          completeDelay: 3000
+        });
+        this.buttonTutorial.setVisible(true);
+        this.buttonExercise1.setVisible(true);
+        this.buttonExercise2.setVisible(true);
+        this.buttonLeft.setVisible(false);
+        this.buttonRight.setVisible(true);
+        this.buttonExercise3.setVisible(false);
+        this.buttonRanking.setVisible(false);
+        this.buttonStats.setVisible(false);
+        break;
+      default:
+        break;
+    }
   }
 
   movePoints(coords: IPoseLandmark[] | undefined) {
