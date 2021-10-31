@@ -2,6 +2,7 @@ import AbstractPoseTrackerScene from '~/pose-tracker-engine/abstract-pose-tracke
 import CustomButtom from '~/gameobjects/custom-button';
 import Constants from '~/constants';
 import { IPoseLandmark } from '~/pose-tracker-engine/types/pose-landmark.interface';
+import Utils from '~/utils';
 
 export default class Menu extends AbstractPoseTrackerScene {
   constructor() {
@@ -11,14 +12,21 @@ export default class Menu extends AbstractPoseTrackerScene {
   private buttonTutorial;
   private buttonExercise1;
   private buttonExercise2;
-  private bodyPoints: Phaser.Physics.Arcade.Sprite[] = [];
+  private buttonExercise3;
+  private buttonRanking;
+  private buttonStats;
+  private buttonRight;
+  private buttonLeft;
+  private background;
+
+  private bodyPoints: any = [];
   private buttons: any[] = [];
   private touchingButton: boolean = false;
 
   create(): void {
     super.create();
 
-    this.add.image(1280/2,720/2,"room");
+    this.background = this.add.image(1280, 720 / 2, "room");
 
     this.buttonTutorial = new CustomButtom(this, 250, 220, 'button', 'Tutorial');
     this.buttons.push(this.buttonTutorial);
@@ -28,6 +36,25 @@ export default class Menu extends AbstractPoseTrackerScene {
 
     this.buttonExercise2 = new CustomButtom(this, 1042, 220, 'button', 'Agilidad');
     this.buttons.push(this.buttonExercise2);
+
+    this.buttonRight = new CustomButtom(this, 1220, 600, 'out', '►', 95, -48)
+    this.buttons.push(this.buttonRight);
+
+    this.buttonLeft = new CustomButtom(this, 60, 600, 'out', '◄', 95, -48)
+    this.buttonLeft.setVisible(false);
+    this.buttons.push(this.buttonLeft);
+
+    this.buttonExercise3 = new CustomButtom(this, 250, 220, 'button', 'Next')
+    this.buttonExercise3.setVisible(false);
+    this.buttons.push(this.buttonExercise3);
+
+    this.buttonRanking = new CustomButtom(this, 645, 220, 'button', 'Ranking')
+    this.buttonRanking.setVisible(false);
+    this.buttons.push(this.buttonRanking);
+
+    this.buttonStats = new CustomButtom(this, 1042, 220, 'button', 'Stats')
+    this.buttonStats.setVisible(false);
+    this.buttons.push(this.buttonStats);
 
 
     this.buttons.forEach((button) => {
@@ -42,7 +69,27 @@ export default class Menu extends AbstractPoseTrackerScene {
       this.bodyPoints.push(point);
     }
 
+
+
     this.buttons.forEach((button) => {
+      if (button) {
+        button.setInteractive()
+          .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+            button.animateToFill(true);
+          })
+          .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+            button.animateToEmpty(true);
+          })
+          .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+            button.animateToFill(true);
+            this.touchingButton = true;
+            const buttonIsFull: CustomButtom = button.buttonIsFull();
+            if (buttonIsFull) {
+              this.menuSwitch(button);
+            }
+          }
+          );
+      }
       this.bodyPoints.forEach((point) => {
         this.physics.add.overlap(
           button,
@@ -50,25 +97,9 @@ export default class Menu extends AbstractPoseTrackerScene {
           function (this) {
             button.animateToFill(false);
             this.touchingButton = true;
-            const buttonIsFull: CustomButtom = button.buttonIsFull();
+            const buttonIsFull = button.buttonIsFull();
             if (buttonIsFull) {
-              switch (button.getText()) {
-                case 'Tutorial':
-                 
-                  break;
-                case 'Cardio':
-                  this.scene.start(Constants.SCENES.WorkoutCardio);
-                  this.scene.start(Constants.SCENES.HUD);
-                  this.scene.bringToTop(Constants.SCENES.HUD);
-                  break;
-                case 'Agilidad':
-                  this.scene.start(Constants.SCENES.WorkoutAgilidad);
-                  this.scene.start(Constants.SCENES.HUD);
-                  this.scene.bringToTop(Constants.SCENES.HUD);
-                  break;
-                default:
-                  break;
-              }
+              this.menuSwitch(button);
             }
           },
           undefined,
@@ -77,6 +108,82 @@ export default class Menu extends AbstractPoseTrackerScene {
       });
     });
 
+  }
+
+  menuSwitch(button: CustomButtom) {
+    switch (button.getText()) {
+      case 'Tutorial':
+
+        break;
+      case 'Cardio':
+        this.scene.start(Constants.SCENES.WorkoutCardio);
+        this.scene.start(Constants.SCENES.HUD);
+        this.scene.bringToTop(Constants.SCENES.HUD);
+        this.scene.remove(Constants.SCENES.Menu)
+        break;
+      case 'Agilidad':
+        this.scene.start(Constants.SCENES.WorkoutAgilidad);
+        this.scene.start(Constants.SCENES.HUD);
+        this.scene.bringToTop(Constants.SCENES.HUD);
+        this.scene.remove(Constants.SCENES.Menu)
+        break;
+      case 'Stats':
+        var test = Utils.getMaxStatFromStorage("cardio");
+        this.scene.bringToTop(Constants.SCENES.STATS);
+        console.log(test);
+        break;
+      case '►':
+        this.tweens.add({
+          targets: this.background,
+          x: 0,
+          duration: 3000,
+          ease: 'Power2',
+          completeDelay: 3000
+        });
+
+        this.buttonRight.setVisible(false);
+        this.buttonTutorial.setVisible(false);
+        this.buttonExercise1.setVisible(false);
+        this.buttonExercise2.setVisible(false);
+        this.buttonLeft.setVisible(true);
+        this.buttonExercise3.setVisible(true);
+        this.buttonRanking.setVisible(true);
+        this.buttonStats.setVisible(true);
+        // this.time.addEvent({
+        //   delay: 2500,
+        //   callback: () => {
+
+        //   },
+        //   loop: true
+        // })
+
+        //   this.tweens.add({
+        //     targets: endScreen,
+        //     duration: 500,
+        //     alpha: 1
+        // });
+
+        break;
+      case '◄':
+        this.tweens.add({
+          targets: this.background,
+          x: 1280,
+          duration: 3000,
+          ease: 'Power2',
+          completeDelay: 3000
+        });
+        this.buttonTutorial.setVisible(true);
+        this.buttonExercise1.setVisible(true);
+        this.buttonExercise2.setVisible(true);
+        this.buttonLeft.setVisible(false);
+        this.buttonRight.setVisible(true);
+        this.buttonExercise3.setVisible(false);
+        this.buttonRanking.setVisible(false);
+        this.buttonStats.setVisible(false);
+        break;
+      default:
+        break;
+    }
   }
 
   movePoints(coords: IPoseLandmark[] | undefined) {
@@ -104,15 +211,14 @@ export default class Menu extends AbstractPoseTrackerScene {
       },
       beforePaint: (poseTrackerResults, canvasTexture) => {
         this.movePoints(poseTrackerResults.poseLandmarks ? poseTrackerResults.poseLandmarks : undefined);
-
         // This function will be called before refreshing the canvas texture.
         // Anything you add to the canvas texture will be rendered.
       },
       afterPaint: (poseTrackerResults) => {
         // This function will be called after refreshing the canvas texture.
-        this.touchingButton = false;
       },
     });
+    this.touchingButton = false;
 
     // Here you can do any other update related to the game.
     // PoseTrackerResults are only available in the previous callbacks, though.

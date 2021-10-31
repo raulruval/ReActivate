@@ -14,6 +14,7 @@ const Constants = {
     WorkoutCardio: 'WorkoutCardio',
     WorkoutAgilidad: 'WorkoutAgilidad',
     HUD: 'HUD',
+    STATS: 'STATS',
   },
   MARKER: {
     ID: 'marker',
@@ -31,9 +32,16 @@ const Constants = {
   },
   MUSIC: {
     TRANCE: 'trance',
+    TRANCE2: 'trance2',
     DESTROYTOUCHED: 'sfxDestroyMarkerTouched',
-    DESTROYUNTOUCHED: 'sfxDestroyMarkerUntouched'
+    DESTROYUNTOUCHED: 'sfxDestroyMarkerUntouched',
+    CONTACTERROR: 'contactError'
   },
+
+  DATA: {
+    RANKING: 'ranking',
+    STATS: 'stats'
+  }
 };
 
 export default Constants;

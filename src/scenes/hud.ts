@@ -20,21 +20,25 @@ export default class HUD extends Phaser.Scene {
   }
 
   create(): void {
-    const workout: Phaser.Scene = this.scene.get(Constants.SCENES.WorkoutCardio);
+    const workoutCardio: Phaser.Scene = this.scene.get(Constants.SCENES.WorkoutCardio);
+    const workoutAgilidad: Phaser.Scene = this.scene.get(Constants.SCENES.WorkoutAgilidad);
 
-    workout.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
-    workout.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
 
-    this.hudImage = this.add.image(400, 37, 'hud');
+    workoutCardio.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
+    workoutCardio.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+    workoutAgilidad.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
+    workoutAgilidad.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+
+    this.hudImage = this.add.image(this.width/3, 50, 'hud');
     this.hudImage.setScale(0.9, 0.85);
 
-    this.expTxt = this.add.text(32, 14, '1', {
+    this.expTxt = this.add.text(76, 27, '1', {
       fontFamily: 'Russo One',
       fontSize: '45px',
       color: '#FFFFFF',
       fontStyle: 'normal',
     });
-    this.clockTxt = this.add.text(this.width / 2 - 48.5, 14, '08:00', {
+    this.clockTxt = this.add.text(this.width / 2 + 30, 27, '00:00', {
       fontFamily: 'Russo One',
       fontSize: '43px',
       color: '#FFFFFF',
@@ -45,7 +49,7 @@ export default class HUD extends Phaser.Scene {
 
   private updateExp(): void {
     if (parseInt(this.expTxt.text) > 9) {
-      this.expTxt.x = 25;
+      this.expTxt.x = 80;
     }
     this.tweens.addCounter({
       from: this.lastExp,
@@ -66,9 +70,9 @@ export default class HUD extends Phaser.Scene {
     if (percent >= 0) {
       this.expBarGraphic.clear();
       this.expBarGraphic.fillStyle(0x00ff00, 0.8);
-      this.expBarGraphic.fillRect(91, 33.5, width * percent, 11.5);
+      this.expBarGraphic.fillRect(125, 46, width * percent, 11.5);
     }
-    if (Number(this.registry.get(Constants.REGISTER.EXP)) == 100) {
+    if (Number(this.registry.get(Constants.REGISTER.EXP)) >= 100) {
       this.level = this.level + 1;
       this.registry.set(Constants.REGISTER.EXP, 0);
       this.events.emit(Constants.EVENT.UPDATEEXP);
