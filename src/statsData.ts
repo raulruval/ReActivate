@@ -4,15 +4,13 @@ export default class StatsData {
     private _maxLevel: number;
     private _touchedMarkers: number;
     private _untouchedMarkers: number;
-    private _errorTouchedMarkers: number;
 
-    constructor(workout: string, date: string, maxLevel: number, touchedMarkers: number, untouchedMarkers: number, errorTouchedMarkers: number) {
+    constructor(workout: string, date: string, maxLevel: number, touchedMarkers: number, untouchedMarkers: number) {
         this._workout = workout;
         this._date = date;
         this._maxLevel = maxLevel;
         this._touchedMarkers = touchedMarkers;
         this._untouchedMarkers = untouchedMarkers;
-        this._errorTouchedMarkers = errorTouchedMarkers;
     }
 
     public get workout(): string {
@@ -45,30 +43,6 @@ export default class StatsData {
     public set untouchedMarkers(value: number) {
         this._untouchedMarkers = value;
     }
-    public get errorTouchedMarkers(): number {
-        return this._errorTouchedMarkers;
-    }
-    public set errorTouchedMarkers(value: number) {
-        this._errorTouchedMarkers = value;
-    }
-
-
-
-    // setUntouchedMarkers(untouchedMarkers: number){
-    //     this.untouchedMarkers = untouchedMarkers;
-    // }
-
-    // setErrorTouchedMarkers(errorTouchedMarkers: number){
-    //     this.errorTouchedMarkers = errorTouchedMarkers;
-    // }
-
-    // setTouchedMarkers(touchedMarkers: number){
-    //     this.touchedMarkers = touchedMarkers;
-    // }
-
-    // setMaxLevel(maxLevel: number){
-    //     this.maxLevel = maxLevel;
-    // }
 
 
 }

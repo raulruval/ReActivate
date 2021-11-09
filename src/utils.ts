@@ -34,14 +34,15 @@ export default class Utils {
         localStorage.setItem("statsData", JSON.stringify(mydata));
     }
 
-    static getMaxStatFromStorage(workout: string) {
+    static getMaxStatFromStorage(workout: string): JSON {
         var mydata = this.getLocalStorageData();
         var max;
-        console.log(mydata[workout]);
+
         for (var i = 0; i < mydata[workout].length; i++) {
             if (max == null || parseInt(mydata[workout][i]["_maxLevel"]) > parseInt(max["_maxLevel"]))
                 max = mydata[workout][i];
         }
+
         return max;
     }
 }

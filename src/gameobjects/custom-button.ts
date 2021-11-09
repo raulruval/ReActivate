@@ -7,6 +7,7 @@ export default class CustomButtom extends Phaser.GameObjects.Container {
   private cancelAnimationEmpty: boolean;
   private barWidth: number;
   private initField: number;
+  private enabled: boolean = true;
 
 
   constructor(
@@ -25,7 +26,7 @@ export default class CustomButtom extends Phaser.GameObjects.Container {
     this.initField = initField ? initField : -166.7;
     this.overImage = new Phaser.GameObjects.Rectangle(scene, this.initField, 0, 0, 95, 0x34495e);
     this.buttomText = scene.add
-      .text(0, 0, inputText, { fontFamily: 'Russo One', fontSize: '55px', color: '#FFFFFF', fontStyle: 'normal' })
+      .text(0, 0, inputText, { fontFamily: 'Russo One', fontSize: '51px', color: '#FFFFFF', fontStyle: 'normal' })
       .setOrigin(0.5);
 
     this.add(this.upImage);
@@ -65,5 +66,13 @@ export default class CustomButtom extends Phaser.GameObjects.Container {
 
   getText(): string {
     return this.buttomText.text;
+  }
+
+  setEnabled(enable: boolean){
+    this.enabled = enable;
+  }
+
+  isEnabled(){
+    return this.enabled;
   }
 }

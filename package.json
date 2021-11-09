@@ -14,7 +14,7 @@
     "@mediapipe/drawing_utils": "^0.2.1617146986",
     "@mediapipe/pose": "0.2.1617147663",
     "gh-pages": "^3.2.3",
-    "phaser": "^3.54.0",
+    "phaser": "^3.55.2",
     "webfontloader": "1.6.28"
   },
   "devDependencies": {
