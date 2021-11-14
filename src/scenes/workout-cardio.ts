@@ -38,6 +38,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
   private touchedMarkers: number = 0;
   private untouchedMarkers: number = 0;
   private errorTouchedMarkers: number = 0;
+  private totalTouchableMarkers: number = 0;
 
   constructor() {
     super(Constants.SCENES.WorkoutCardio);
@@ -265,7 +266,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
       }
     } else if ((marker.getErrorMarker() && !touched) || (!marker.getErrorMarker() && touched)) {
       this.exp = this.exp + 10;
-      this.touchedMarkers = this.touchedMarkers + 1;
+      if (!marker.getErrorMarker() && touched) this.touchedMarkers = this.touchedMarkers + 1;
     }
     this.registry.set(Constants.REGISTER.EXP, this.exp);
     this.events.emit(Constants.EVENT.UPDATEEXP);
@@ -294,7 +295,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
 
   saveData() {
     var date: string = Utils.getActualDate();
-    var statsData = new StatsData("cardio", date, this.currentLevel, this.touchedMarkers, this.untouchedMarkers);
+    var statsData = new StatsData("cardio", date, this.currentLevel, this.touchedMarkers, this.untouchedMarkers, this.totalTouchableMarkers);
     Utils.setLocalStorageData(statsData);
   }
 
@@ -338,6 +339,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
             marker.createAnimation();
             this.currentMarkersAlive++;
             this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
+            this.totalTouchableMarkers++;
           }
         }
         if (marker.isInternalTimerConsumed() && marker.getAnimationCreated()) {

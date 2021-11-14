@@ -56,6 +56,7 @@ export default class Loader extends Phaser.Scene {
         // this.scene.bringToTop(Constants.SCENES.HUD);
       },
       this,
+
     );
 
     this.load.image('point', 'img/point.png');
@@ -74,7 +75,7 @@ export default class Loader extends Phaser.Scene {
     this.load.image('meteorite', 'img/meteorite.png');
     this.load.image('particle-red', 'particles/particle-red.png');
     this.load.image('particle-orange', 'particles/particle-orange.png');
-
+    this.load.bitmapFont('gothic', 'fonts/bitmap/gothic.png', 'fonts/bitmap/gothic.xml');
 
     // MUSIC & EFFECTS
     this.load.audio('trance', 'audio/trance.mp3');

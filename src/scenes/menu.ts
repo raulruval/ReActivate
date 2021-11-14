@@ -245,7 +245,9 @@ export default class Menu extends AbstractPoseTrackerScene {
         this.buttonExitMarker.setEnabled(false);
         this.setScreen2(true);
         this.buttonLeft.setVisible(true);
+        this.buttonLeft.setEnabled(true);
         this.statsView.destroyStats();
+        this.statsOn = false;
         break;
       default:
         break;
@@ -299,6 +301,7 @@ export default class Menu extends AbstractPoseTrackerScene {
     }
     if (this.statsOn) {
       this.statsView.updateAnimationStats();
+      this.statsView.updateAnimationCircle();
     }
     super.update(time, delta, {
       renderElementsSettings: {

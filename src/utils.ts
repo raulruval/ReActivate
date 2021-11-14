@@ -2,7 +2,6 @@ import StatsData from "./statsData";
 
 export default class Utils {
 
-
     static getActualDate(): string {
         let date_ob = new Date();
         let date = ("0" + date_ob.getDate()).slice(-2);
@@ -22,6 +21,9 @@ export default class Utils {
             ],
             "agility": [
 
+            ],
+            "flexibility": [
+
             ]
         });
         var statsData = JSON.parse(localStorage.getItem("statsData") || initStats);
@@ -34,14 +36,20 @@ export default class Utils {
         localStorage.setItem("statsData", JSON.stringify(mydata));
     }
 
-    static getMaxStatFromStorage(workout: string): JSON {
+    static getMaxStatFromStorage(): JSON {
         var mydata = this.getLocalStorageData();
-        var max;
+        var initStatsArray: any[3] = ['cardio', 'agility', 'flexibility']
 
-        for (var i = 0; i < mydata[workout].length; i++) {
-            if (max == null || parseInt(mydata[workout][i]["_maxLevel"]) > parseInt(max["_maxLevel"]))
-                max = mydata[workout][i];
+        var max;
+        for (var w = 0; w <= 2; w++) {
+            if (mydata[initStatsArray[w]]?.length) {
+                for (var i = 0; i < mydata[initStatsArray[w]].length; i++) {
+                    if (max == null || parseInt(mydata[initStatsArray[w]][i]["_maxLevel"]) > parseInt(max["_maxLevel"]))
+                        max = mydata[initStatsArray[w]][i];
+                }
+            }
         }
+
 
         return max;
     }
