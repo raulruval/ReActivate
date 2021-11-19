@@ -1,4 +1,3 @@
-import Constants from '~/constants';
 import Utils from '~/utils';
 
 export default class Stats extends Phaser.GameObjects.Image {
@@ -6,7 +5,7 @@ export default class Stats extends Phaser.GameObjects.Image {
     private mystats;
     private TitleTxt: Phaser.GameObjects.Text;
     private bodyTxt: Phaser.GameObjects.Text;
-    private backgroundStats;
+    private background;
     private expBarGraphic: Phaser.GameObjects.Graphics;
     private circleGraphicCorrect: Phaser.GameObjects.Graphics;
     private circleGraphicFailed: Phaser.GameObjects.Graphics;
@@ -35,8 +34,8 @@ export default class Stats extends Phaser.GameObjects.Image {
         this.mywidth = x;
         this.myheight = y;
 
-        this.backgroundStats = this.scene.add.image(this.mywidth, this.myheight + 20, texture);
-        this.backgroundStats.setScale(1, 1.05);
+        this.background = this.scene.add.image(this.mywidth, this.myheight + 20, texture);
+        this.background.setScale(1, 1.05);
 
         this.TitleTxt = this.scene.add.text(this.mywidth / 4, this.myheight / 4, 'Estadísticas', {
             fontFamily: 'Russo One',
@@ -198,7 +197,7 @@ export default class Stats extends Phaser.GameObjects.Image {
     }
 
     destroyStats() {
-        this.backgroundStats.destroy();
+        this.background.destroy();
         this.TitleTxt.destroy();
         if (this.bodyTxt) {
             this.bodyTxt.destroy();
@@ -206,8 +205,8 @@ export default class Stats extends Phaser.GameObjects.Image {
         this.expBarGraphic.destroy();
         this.textFailed.destroy();
         this.textCorrect.destroy();
-        this.textCorrectLabel.destro();
-        this.textFailedLabel.destro();
+        this.textCorrectLabel.destroy();
+        this.textFailedLabel.destroy();
         this.circleGraphicCorrect.destroy();
         this.circleGraphicFailed.destroy();
     }

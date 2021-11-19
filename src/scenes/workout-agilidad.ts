@@ -39,6 +39,9 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
   private ballAppearanceTop: boolean = true;
   private width: number;
   private height: number;
+  private touchedMarkers: number = 0;
+  private untouchedMarkers: number = 0;
+  private totalTouchableMarkers: number = 0;
 
   constructor() {
     super(Constants.SCENES.WorkoutAgilidad);
@@ -303,9 +306,11 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
     if (!touched) {
       if (Number(this.registry.get(Constants.REGISTER.EXP)) > 0) {
         this.exp = this.exp - 10;
+        if (!marker.getErrorMarker() && !touched) this.untouchedMarkers = this.untouchedMarkers + 1;
       }
     } else if (touched) {
       this.exp = this.exp + 10;
+      if (!marker.getErrorMarker() && touched) this.touchedMarkers = this.touchedMarkers + 1;
     }
 
     this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
@@ -330,9 +335,8 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
 
   saveData() {
     var date: string = Utils.getActualDate();
-    // FIXME: Estadísticas workout agilidad
-    //var statsData = new StatsData("agility", date, this.currentLevel, this.touchedMarkers, this.untouchedMarkers, this.errorTouchedMarkers);
-    //Utils.setLocalStorageData(statsData);
+    var statsData = new StatsData("agility", date, this.currentLevel, this.touchedMarkers, this.untouchedMarkers, this.totalTouchableMarkers);
+    Utils.setLocalStorageData(statsData);
   }
 
   update(time: number, delta: number): void {
@@ -373,6 +377,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
             marker.createAnimation();
             this.currentMarkersAlive++;
             this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
+            this.totalTouchableMarkers++;
           }
         }
         if (marker.isInternalTimerConsumed() && marker.getAnimationCreated()) {

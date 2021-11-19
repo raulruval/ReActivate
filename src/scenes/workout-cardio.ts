@@ -32,12 +32,11 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
   private errorMakerProb = false;
   private currentMarkersAlive: number = 0;
   private maxMarkers: number = 1; // Se empieza con al menos 1 marcador
-  private currentLevel: number;
+  private currentLevel: number = 1;
   private width: number;
   private height: number;
   private touchedMarkers: number = 0;
   private untouchedMarkers: number = 0;
-  private errorTouchedMarkers: number = 0;
   private totalTouchableMarkers: number = 0;
 
   constructor() {
@@ -261,7 +260,6 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
     if ((marker.getErrorMarker() && touched) || (!marker.getErrorMarker() && !touched)) {
       if (Number(this.registry.get(Constants.REGISTER.EXP)) > 0) {
         this.exp = this.exp - 10;
-        if (marker.getErrorMarker() && touched) this.errorTouchedMarkers = this.errorTouchedMarkers + 1;
         if (!marker.getErrorMarker() && !touched) this.untouchedMarkers = this.untouchedMarkers + 1;
       }
     } else if ((marker.getErrorMarker() && !touched) || (!marker.getErrorMarker() && touched)) {

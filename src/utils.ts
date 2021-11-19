@@ -16,41 +16,38 @@ export default class Utils {
 
     static getLocalStorageData(): JSON {
         var initStats = JSON.stringify({
-            "cardio": [
-
-            ],
-            "agility": [
-
-            ],
-            "flexibility": [
-
-            ]
+            "stats": []
         });
         var statsData = JSON.parse(localStorage.getItem("statsData") || initStats);
         return statsData;
     }
 
+    static getLocalStorageByDate(): [] {
+        var mydata = this.getLocalStorageData();
+        var sortedStats: [] = [];
+        sortedStats = mydata["stats"];
+        sortedStats.sort((a: any, b: any) => {
+            return   new Date(b._date).valueOf() - new Date(a._date).valueOf();
+        })
+        console.log(sortedStats);
+        return sortedStats;
+    }
+
     static setLocalStorageData(statsData: StatsData) {
         var mydata = this.getLocalStorageData();
-        mydata["cardio"].push(statsData);
+        mydata["stats"].push(statsData);
         localStorage.setItem("statsData", JSON.stringify(mydata));
     }
 
     static getMaxStatFromStorage(): JSON {
         var mydata = this.getLocalStorageData();
-        var initStatsArray: any[3] = ['cardio', 'agility', 'flexibility']
-
         var max;
-        for (var w = 0; w <= 2; w++) {
-            if (mydata[initStatsArray[w]]?.length) {
-                for (var i = 0; i < mydata[initStatsArray[w]].length; i++) {
-                    if (max == null || parseInt(mydata[initStatsArray[w]][i]["_maxLevel"]) > parseInt(max["_maxLevel"]))
-                        max = mydata[initStatsArray[w]][i];
-                }
+        if (mydata["stats"]?.length) {
+            for (var i = 0; i < mydata["stats"].length; i++) {
+                if (max == null || parseInt(mydata["stats"][i]["_maxLevel"]) > parseInt(max["_maxLevel"]))
+                    max = mydata["stats"][i];
             }
         }
-
-
         return max;
     }
 }

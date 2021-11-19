@@ -3,10 +3,11 @@ import CustomButtom from '~/gameobjects/custom-button';
 import Constants from '~/constants';
 import { IPoseLandmark } from '~/pose-tracker-engine/types/pose-landmark.interface';
 import Utils from '~/utils';
-import Stats from './stats';
+import Stats from '../modals/stats';
 import WorkoutCardio from './workout-cardio';
 import HUD from './hud';
 import WorkoutAgility from './workout-agilidad';
+import Historical from '~/modals/historical';
 
 export default class Menu extends AbstractPoseTrackerScene {
   constructor() {
@@ -23,9 +24,12 @@ export default class Menu extends AbstractPoseTrackerScene {
   private buttonLeft;
   private buttonExitMarker;
   private background;
+  private buttonNextHistorical;
+  private buttonPreviousHistorical;
   private width: number;
   private height: number;
   private statsView: Stats;
+  private historicalView: Historical;
   private titleText: Phaser.GameObjects.Text;
   private statsOn;
 
@@ -63,12 +67,24 @@ export default class Menu extends AbstractPoseTrackerScene {
     this.agility = new CustomButtom(this, 1042, 220, 'button', 'Agilidad');
     this.buttons.push(this.agility);
 
-    this.buttonRight = new CustomButtom(this, 1220, 600, 'out', '►', 95, -48)
+    this.buttonRight = new CustomButtom(this, 1220, 600, 'out', '►', 95, -48);
     this.buttons.push(this.buttonRight);
 
-    this.buttonLeft = new CustomButtom(this, 60, 600, 'out', '◄', 95, -48)
+    this.buttonLeft = new CustomButtom(this, 60, 600, 'out', '◄', 95, -48);
     this.buttonLeft.setVisible(false);
     this.buttons.push(this.buttonLeft);
+
+    
+    this.buttonPreviousHistorical = new CustomButtom(this, 80, this.height / 2, 'out', '＜', 95, -48);
+    this.buttonPreviousHistorical.setVisible(false);
+    this.buttonPreviousHistorical.setEnabled(false);
+    this.buttons.push(this.buttonPreviousHistorical);
+
+    this.buttonNextHistorical = new CustomButtom(this, 1200, this.height / 2, 'out', '＞', 95, -48);
+    this.buttonNextHistorical.setVisible(false);
+    this.buttonNextHistorical.setEnabled(false);
+    this.buttons.push(this.buttonNextHistorical);
+
 
     this.tutorial = new CustomButtom(this, 250, 220, 'button', 'Tutorial')
     this.tutorial.setVisible(false);
@@ -191,6 +207,17 @@ export default class Menu extends AbstractPoseTrackerScene {
 
         break;
       case 'Historial':
+        this.historicalView = new Historical(this, this.width / 2, this.height / 2, "backgroundStats");
+        this.buttonLeft.setVisible(false);
+        this.buttonLeft.setEnabled(false);
+        this.setScreen2(false);
+        this.titleText.setVisible(false);
+        this.buttonExitMarker.setVisible(true);
+        this.buttonExitMarker.setEnabled(true);
+        this.buttonNextHistorical.setVisible(true);
+        this.buttonNextHistorical.setEnabled(true);
+        this.buttonPreviousHistorical.setVisible(true);
+        this.buttonPreviousHistorical.setEnabled(true);
 
         break;
       case '►':
@@ -246,8 +273,21 @@ export default class Menu extends AbstractPoseTrackerScene {
         this.setScreen2(true);
         this.buttonLeft.setVisible(true);
         this.buttonLeft.setEnabled(true);
-        this.statsView.destroyStats();
+        this.buttonNextHistorical.setVisible(false);
+        this.buttonPreviousHistorical.setVisible(false);
+        this.buttonNextHistorical.setEnabled(false);
+        this.buttonPreviousHistorical.setEnabled(false);
+        if (this.historicalView)
+          this.historicalView.destroyHistorical();
+        if (this.statsView)
+          this.statsView.destroyStats();
         this.statsOn = false;
+        break;
+      case '＞':
+        this.historicalView.showHistorical(true);
+        break;
+      case '＜':
+        this.historicalView.showHistorical(false);
         break;
       default:
         break;
