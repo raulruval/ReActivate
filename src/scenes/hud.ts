@@ -23,13 +23,16 @@ export default class HUD extends Phaser.Scene {
     const workoutCardio: Phaser.Scene = this.scene.get(Constants.SCENES.WorkoutCardio);
     const workoutAgilidad: Phaser.Scene = this.scene.get(Constants.SCENES.WorkoutAgilidad);
 
+    if (workoutCardio) {
+      workoutCardio.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
+      workoutCardio.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+    }
+    if (workoutAgilidad) {
+      workoutAgilidad.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
+      workoutAgilidad.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+    }
 
-    workoutCardio.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
-    workoutCardio.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
-    workoutAgilidad.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
-    workoutAgilidad.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
-
-    this.hudImage = this.add.image(this.width/3, 50, 'hud');
+    this.hudImage = this.add.image(this.width / 3, 50, 'hud');
     this.hudImage.setScale(0.9, 0.85);
 
     this.expTxt = this.add.text(76, 27, '1', {

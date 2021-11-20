@@ -56,6 +56,7 @@ export default class Loader extends Phaser.Scene {
         // this.scene.bringToTop(Constants.SCENES.HUD);
       },
       this,
+
     );
 
     this.load.image('point', 'img/point.png');
@@ -68,12 +69,13 @@ export default class Loader extends Phaser.Scene {
     this.load.image('errorBall', 'img/errorBall.png');
     this.load.image('marker', 'img/marker.png');
     this.load.image('transparentMarker', 'img/transparentMarker.png');
+    this.load.image('backgroundStats', 'img/backgroundStats.png');
     this.load.image('room', 'img/room.png');
     this.load.image('ball', 'img/koala.png');
     this.load.image('meteorite', 'img/meteorite.png');
     this.load.image('particle-red', 'particles/particle-red.png');
     this.load.image('particle-orange', 'particles/particle-orange.png');
-
+    this.load.bitmapFont('gothic', 'fonts/bitmap/gothic.png', 'fonts/bitmap/gothic.xml');
 
     // MUSIC & EFFECTS
     this.load.audio('trance', 'audio/trance.mp3');
@@ -81,11 +83,6 @@ export default class Loader extends Phaser.Scene {
     this.load.audio('sfxDestroyMarkerTouched', 'audio/soundAnimation.wav');
     this.load.audio('sfxDestroyMarkerUntouched', 'audio/sfxDestroyMarkerUntouched.wav');
     this.load.audio('contactError', 'audio/contactError.wav');
-
-    // Data
-
-    this.load.json('jsonDataRanking', 'assets/data/ranking.json');
-
 
     //Listener cuando se hayan cargado todos los Assets
     // this.load.on(

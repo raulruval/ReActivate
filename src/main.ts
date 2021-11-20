@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import MainMenu from './scenes/menu';
-import WorkoutAgilidad from '~/scenes/workout-agilidad';
+import WorkoutAgility from '~/scenes/workout-agilidad';
 import Loader from './scenes/loader';
 import HUD from './scenes/hud';
 import WorkoutCardio from './scenes/workout-cardio';
@@ -24,7 +24,7 @@ const game = new Phaser.Game({
     },
   },
   autoFocus: true,
-  scene: [Loader, MainMenu, WorkoutCardio, WorkoutAgilidad, HUD],
+  scene: [Loader, MainMenu, WorkoutCardio, WorkoutAgility, HUD],
 });
 
 export default game;
