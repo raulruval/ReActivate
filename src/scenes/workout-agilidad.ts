@@ -335,7 +335,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
 
   saveData() {
     var date: string = Utils.getActualDate();
-    var statsData = new StatsData("agility", date, this.currentLevel, this.touchedMarkers, this.untouchedMarkers, this.totalTouchableMarkers);
+    var statsData = new StatsData("agilidad", date, this.currentLevel, this.touchedMarkers, this.untouchedMarkers, this.totalTouchableMarkers);
     Utils.setLocalStorageData(statsData);
   }
 

@@ -47,11 +47,8 @@ export default class Loader extends Phaser.Scene {
     this.load.on(
       'complete',
       () => {
-         this.scene.start(Constants.SCENES.Menu);
-        // this.scene.start(Constants.SCENES.WorkoutCardio);
-        // this.scene.start(Constants.SCENES.HUD);
-        // this.scene.bringToTop(Constants.SCENES.HUD);
-        // this.scene.start(Constants.SCENES.WorkoutAgilidad);
+        this.scene.start(Constants.SCENES.Menu);
+        // this.scene.start(Constants.SCENES.WorkoutFlexibilidad);
         // this.scene.start(Constants.SCENES.HUD);
         // this.scene.bringToTop(Constants.SCENES.HUD);
       },
@@ -75,6 +72,9 @@ export default class Loader extends Phaser.Scene {
     this.load.image('meteorite', 'img/meteorite.png');
     this.load.image('particle-red', 'particles/particle-red.png');
     this.load.image('particle-orange', 'particles/particle-orange.png');
+    this.load.image('triangle', 'img/triangle.png');
+    this.load.image('redTriangle', 'img/redTriangle.png');
+
     this.load.bitmapFont('gothic', 'fonts/bitmap/gothic.png', 'fonts/bitmap/gothic.xml');
 
     // MUSIC & EFFECTS

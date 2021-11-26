@@ -8,6 +8,7 @@ import WorkoutCardio from './workout-cardio';
 import HUD from './hud';
 import WorkoutAgility from './workout-agilidad';
 import Historical from '~/modals/historical';
+import WorkoutFlexibilidad from './workout-flexibility';
 
 export default class Menu extends AbstractPoseTrackerScene {
   constructor() {
@@ -181,8 +182,8 @@ export default class Menu extends AbstractPoseTrackerScene {
 
   menuSwitch(button: CustomButtom) {
     switch (button.getText()) {
-      case 'Flexibility':
-        //this.startNewSceneWorkout(Constants.SCENES.WorkoutCardio, WorkoutCardio);
+      case 'Flexibilidad':
+        this.startNewSceneWorkout(Constants.SCENES.WorkoutFlexibilidad, WorkoutFlexibilidad);
         break;
       case 'Cardio':
         this.startNewSceneWorkout(Constants.SCENES.WorkoutCardio, WorkoutCardio);
@@ -202,9 +203,6 @@ export default class Menu extends AbstractPoseTrackerScene {
         this.buttonExitMarker.setEnabled(true);
 
         this.statsOn = true;
-        break;
-      case 'Flexibilidad':
-
         break;
       case 'Historial':
         this.historicalView = new Historical(this, this.width / 2, this.height / 2, "backgroundStats");

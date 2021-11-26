@@ -13,6 +13,7 @@ const Constants = {
     Menu: 'Menu',
     WorkoutCardio: 'WorkoutCardio',
     WorkoutAgilidad: 'WorkoutAgilidad',
+    WorkoutFlexibilidad: 'WorkoutFlexibilidad',
     HUD: 'HUD',
     STATS: 'STATS',
   },

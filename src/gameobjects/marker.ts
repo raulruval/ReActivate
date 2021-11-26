@@ -12,6 +12,11 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   private errorMarker: boolean = false;
   private internalTimerConsumed: boolean = false;
   private timerEvent;
+  private defaultMarker: string = "blueBall";
+  private defaultErrorMarker: string = "errorBall";
+  private flexibilityGame: boolean;
+  private directionAngle: number = 0;
+  private flagChangeAngle = false;
 
 
   constructor(config: any) {
@@ -26,9 +31,15 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(): void {
-    if (this.animationCreated) {
+    if (this.animationCreated && !this.flexibilityGame) {
       this.ball.angle += 0.5;
       this.ball.scale -= 0.0002;
+    } else if (this.animationCreated && this.flexibilityGame) {
+      this.ball.scale -= 0.000025;
+      if (this.flagChangeAngle) {
+        this.ball.rotation = this.directionAngle;
+        this.flagChangeAngle = false;
+      }
     }
   }
 
@@ -46,25 +57,16 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   }
 
   createAnimation(currentLevel: number): void {
+
     if (this.errorMarker) {
-      this.ball = this.scene.add.sprite(this.coordx, this.coordy, 'errorBall');
+      this.ball = this.scene.add.sprite(this.coordx, this.coordy, this.defaultErrorMarker);
     } else {
-      this.ball = this.scene.add.sprite(this.coordx, this.coordy, 'blueBall');
+      this.ball = this.scene.add.sprite(this.coordx, this.coordy, this.defaultMarker);
     }
     this.ball.setScale(0.11);
 
-    // /// Marker animation
-    // this.tween = this.scene.tweens.add({
-    //   targets: this.ball,
-    //   from: 30,
-    //   to: 0,
-    //   duration: 4500,
-    //   delay: 700,
-    //   ease: 'Expo.easeIn',
-    //   yoyo: true,
-    // });
-
     let timerForMarker = 5500;
+    if (this.flexibilityGame) timerForMarker = 20000;
     if (currentLevel < 10) {
       timerForMarker = timerForMarker - (currentLevel * 100);
     }
@@ -78,6 +80,12 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
     this.animationCreated = true;
   }
 
+  setDefaultBall(ball: string, errorBall: string) {
+    this.defaultMarker = ball;
+    this.defaultErrorMarker = errorBall;
+    this.flexibilityGame = true;
+  }
+
   getAnimationCreated(): boolean {
     return this.animationCreated;
   }
@@ -88,6 +96,18 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
 
   setErrorMarker(errorMaker: boolean): void {
     this.errorMarker = errorMaker;
+    if (this.animationCreated) {
+      if (this.errorMarker) {
+        this.ball.setTexture(this.defaultErrorMarker);
+      } else {
+        this.ball.setTexture(this.defaultMarker);
+      }
+    }
+  }
+
+  setDirectionAngle(angle: number) {
+    this.directionAngle = angle;
+    this.flagChangeAngle = true;
   }
 
   getErrorMarker(): boolean {
