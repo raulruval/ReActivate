@@ -48,7 +48,7 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
     private nextSequenceDirectionCopy: number[] = [];
     private controlNextMarker: number = 0;
     private prevMarker;
-    private triggerTimer: Phaser.Time.TimerEvent;
+    private showNextSequence: boolean = true;
 
 
     constructor() {
@@ -193,7 +193,7 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
 
     createLayout(): void {
         let width: number = 50;
-        let height: number = 150;
+        let height: number = 160;
 
         for (var i = 1; i < 25; i++) {
             const marker = new Marker({
@@ -205,7 +205,11 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
             });
             marker.setDefaultBall("triangle", "redTriangle");
             if (i % 6 == 0) {
-                height = height + 170;
+                if (i > 17){
+                    height = height + 140;
+                }else{
+                    height = height + 170;
+                }
                 width = 50;
             } else {
                 if (i % 3 == 0) {
@@ -244,12 +248,14 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
 
     destroyMarker(marker: any, touched: boolean): void {
         this.currentMarkersAlive--;
+        this.showNextSequence = false;
         this.exp = Number(this.registry.get(Constants.REGISTER.EXP));
         if ((marker.getErrorMarker() && touched) || (!marker.getErrorMarker() && !touched)) {
             if (Number(this.registry.get(Constants.REGISTER.EXP)) > 0) {
                 this.exp = this.exp - 10;
                 if (!marker.getErrorMarker() && !touched) this.untouchedMarkers = this.untouchedMarkers + 1;
             }
+            this.nextSequenceDirectionCopy = this.nextSequenceDirectionCopy.filter(id => id !== marker.id)
         } else if (!marker.getErrorMarker() && touched) {
             this.exp = this.exp + 10;
             this.invertDirection ? this.nextSequenceDirectionCopy.pop() : this.nextSequenceDirectionCopy.shift();
@@ -267,16 +273,17 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
         this.events.emit(Constants.EVENT.UPDATEEXP);
         // Update variables for next markers
         if (this.currentMarkersAlive == 0) {
-
-            this.controlNextMarker = 1;
-            this.currentLevel = Number(this.registry.get(Constants.REGISTER.LEVEL))
-            this.probabilityTypesMarkers(0.5);
-            this.randomSequence = Utils.random(0, sequences.length - 1);
-            this.maxMarkers = sequences[this.randomSequence].length;
-
-
-            setInterval(this.update, 2000);
-
+            this.time.addEvent({
+                delay: 1500,                // ms
+                callback: () => {
+                    this.controlNextMarker = 1;
+                    this.currentLevel = Number(this.registry.get(Constants.REGISTER.LEVEL))
+                    this.probabilityTypesMarkers(0.5);
+                    this.randomSequence = Utils.random(0, sequences.length - 1);
+                    this.maxMarkers = sequences[this.randomSequence].length;
+                    this.showNextSequence = true;
+                },
+            });
         }
     }
 
@@ -322,7 +329,7 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
                     marker.update();
                 }
                 /* Lógica para crear los marcadores */
-                if (sequences[this.randomSequence].includes(marker.id)) {
+                if (sequences[this.randomSequence].includes(marker.id) && this.showNextSequence) {
                     if (!marker.getAnimationCreated() && this.triggerAction && this.currentMarkersAlive < this.maxMarkers) {
                         this.nextSequenceDirectionCopy = Array.from(sequences[this.randomSequence]);
                         var rotation = 1.57;

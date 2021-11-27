@@ -57,7 +57,7 @@ export default class HUD extends Phaser.Scene {
 
   private updateExp(): void {
     if (parseInt(this.expTxt.text) > 9) {
-      this.expTxt.x = 80;
+      this.expTxt.x = 63;
     }
     this.tweens.addCounter({
       from: this.lastExp,
