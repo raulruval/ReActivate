@@ -15,6 +15,7 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   private defaultMarker: string = "blueBall";
   private defaultErrorMarker: string = "errorBall";
   private flexibilityGame: boolean;
+  private agilityGame: boolean;
   private directionAngle: number = 0;
   private flagChangeAngle = false;
 
@@ -33,7 +34,11 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   update(): void {
     if (this.animationCreated && !this.flexibilityGame) {
       this.ball.angle += 0.5;
-      this.ball.scale -= 0.0002;
+      if (this.agilityGame) {
+        this.ball.scale -= 0.0001;
+      } else {
+        this.ball.scale -= 0.0002;
+      }
     } else if (this.animationCreated && this.flexibilityGame) {
       this.ball.scale -= 0.000025;
       if (this.flagChangeAngle) {
@@ -45,9 +50,9 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
 
   public destroyMarkerAnimation(touched: boolean): void {
     if (touched && !this.errorMarker || !touched && this.errorMarker) {
-      this.scene.sound.play(Constants.MUSIC.DESTROYTOUCHED);
+      this.scene.sound.play(Constants.MUSIC.DESTROYTOUCHED, { volume: 0.85 });
     } else {
-      this.scene.sound.play(Constants.MUSIC.DESTROYUNTOUCHED);
+      this.scene.sound.play(Constants.MUSIC.DESTROYUNTOUCHED, { volume: 0.5 });
     }
     this.timerEvent.remove(false);
     // this.group.destroy(true, true);
@@ -63,14 +68,15 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
     } else {
       this.ball = this.scene.add.sprite(this.coordx, this.coordy, this.defaultMarker);
     }
-    if (this.flexibilityGame){
+    if (this.flexibilityGame) {
       this.ball.setScale(0.10);
-    }else{
+    } else {
       this.ball.setScale(0.11);
     }
 
     let timerForMarker = 5500;
     if (this.flexibilityGame) timerForMarker = 20000;
+    if (this.agilityGame) timerForMarker = 9000;
     if (currentLevel < 10) {
       timerForMarker = timerForMarker - (currentLevel * 100);
     }
@@ -116,6 +122,10 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
 
   getErrorMarker(): boolean {
     return this.errorMarker;
+  }
+
+  setAgilityGame(agility: boolean) {
+    this.agilityGame = agility;
   }
 
   isInternalTimerConsumed(): boolean {

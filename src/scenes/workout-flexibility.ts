@@ -92,7 +92,7 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
 
         /*****************************************/
 
-        this.audioScene = this.sound.add(Constants.MUSIC.TRANCE, { loop: true });
+        this.audioScene = this.sound.add(Constants.MUSIC.TRANCE3, { volume: 0.40,loop: false });
 
         /************** Get ready markers ******** */
         this.buttonsReady.forEach((button) => {
@@ -141,7 +141,7 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
 
         /************** Time control ************** */
         this.levelTime = 1;
-        this.remainingTime = 8 * 60;
+        this.remainingTime = 7 * 60 + 7;
         this.registry.set(Constants.REGISTER.EXP, this.exp);
         /***************************************** */
 
@@ -177,7 +177,7 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
             if (button.getText() != '[➔')
                 button.destroy();
         });
-        //this.audioScene.play();
+        this.audioScene.play();
         this.getReadyLeft = false;
         this.getReadyRight = false;
         this.sound.pauseOnBlur = false;
@@ -205,9 +205,9 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
             });
             marker.setDefaultBall("triangle", "redTriangle");
             if (i % 6 == 0) {
-                if (i > 17){
+                if (i > 17) {
                     height = height + 140;
-                }else{
+                } else {
                     height = height + 170;
                 }
                 width = 50;

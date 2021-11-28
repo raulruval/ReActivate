@@ -85,7 +85,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
 
     /*****************************************/
 
-    this.audioScene = this.sound.add(Constants.MUSIC.TRANCE2, { loop: true });
+    this.audioScene = this.sound.add(Constants.MUSIC.TRANCE2, { volume: 0.65, loop: false });
     this.audioContactError = this.sound.add(Constants.MUSIC.CONTACTERROR, { loop: false });
 
     /************** Get ready markers ******** */
@@ -261,7 +261,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
         texture: Constants.TRANSPARENTMARKER.ID,
         id: i,
       });
-
+      marker.setAgilityGame(true);
       if (i % 6 == 0) {
         height = height + 170;
         width = 50;

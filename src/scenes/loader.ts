@@ -57,6 +57,8 @@ export default class Loader extends Phaser.Scene {
     );
 
     this.load.image('point', 'img/point.png');
+    this.load.image('rightHand', 'img/rightHand.png');
+    this.load.image('leftHand', 'img/leftHand.png');
     this.load.image('hud', 'img/hud.png');
     this.load.image('out', 'img/out.png');
     this.load.image('silhouette', 'img/blueSilhouette.png');
@@ -80,7 +82,8 @@ export default class Loader extends Phaser.Scene {
     // MUSIC & EFFECTS
     this.load.audio('trance', 'audio/trance.mp3');
     this.load.audio('trance2', 'audio/trance2.mp3');
-    this.load.audio('sfxDestroyMarkerTouched', 'audio/soundAnimation.wav');
+    this.load.audio('trance3', 'audio/trance3.mp3');
+    this.load.audio('sfxDestroyMarkerTouched', 'audio/soundAnimation.mp3');
     this.load.audio('sfxDestroyMarkerUntouched', 'audio/sfxDestroyMarkerUntouched.wav');
     this.load.audio('contactError', 'audio/contactError.wav');
 

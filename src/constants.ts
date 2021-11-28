@@ -34,6 +34,7 @@ const Constants = {
   MUSIC: {
     TRANCE: 'trance',
     TRANCE2: 'trance2',
+    TRANCE3: 'trance3',
     DESTROYTOUCHED: 'sfxDestroyMarkerTouched',
     DESTROYUNTOUCHED: 'sfxDestroyMarkerUntouched',
     CONTACTERROR: 'contactError'
