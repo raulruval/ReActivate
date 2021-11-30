@@ -1,4 +1,4 @@
-const cacheName = 'PhysioGalenus';
+const cacheName = 'ReActívate';
 const appShellFiles = [
   './',
   './index.html',
