@@ -1,7 +1,7 @@
 {
-  "name": "Physio Galenus",
-  "short_name": "PG",
-  "description": "Physio Galenus web application for remote rehabilitation.",
+  "name": "ReActívate",
+  "short_name": "RA",
+  "description": "Exergame environment using augmented reality.",
   "icons": [
     {
       "src": "assets/img/icons/icon-32.png",
