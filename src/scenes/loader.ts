@@ -48,9 +48,6 @@ export default class Loader extends Phaser.Scene {
       'complete',
       () => {
         this.scene.start(Constants.SCENES.Menu);
-        // this.scene.start(Constants.SCENES.WorkoutFlexibilidad);
-        // this.scene.start(Constants.SCENES.HUD);
-        // this.scene.bringToTop(Constants.SCENES.HUD);
       },
       this,
 
@@ -70,7 +67,7 @@ export default class Loader extends Phaser.Scene {
     this.load.image('transparentMarker', 'img/transparentMarker.png');
     this.load.image('backgroundStats', 'img/backgroundStats.png');
     this.load.image('room', 'img/room.png');
-    this.load.image('ball', 'img/koala.png');
+    this.load.image('ball', 'img/koala.png'); // TODO: Sustituir por bola roja
     this.load.image('meteorite', 'img/meteorite.png');
     this.load.image('particle-red', 'particles/particle-red.png');
     this.load.image('particle-orange', 'particles/particle-orange.png');
@@ -86,19 +83,14 @@ export default class Loader extends Phaser.Scene {
     this.load.audio('sfxDestroyMarkerTouched', 'audio/soundAnimation.mp3');
     this.load.audio('sfxDestroyMarkerUntouched', 'audio/sfxDestroyMarkerUntouched.wav');
     this.load.audio('contactError', 'audio/contactError.wav');
-
-    //Listener cuando se hayan cargado todos los Assets
-    // this.load.on(
-    //   'complete',
-    //   () => {
-    //     const fuenteJSON = this.cache.json.get(Constantes.FUENTES.JSON);
-    //     this.cache.bitmapFont.add(Constantes.FUENTES.BITMAP, Phaser.GameObjects.RetroFont.Parse(this, fuenteJSON));
-
-    //     //carga MENU
-    //     this.scene.start(Constantes.ESCENAS.MENU);
-    //   },
-    //   this,
-    // );
+    this.load.audio('cardio', 'audio/cardio.wav');
+    this.load.audio('agility', 'audio/agilidad.wav');
+    this.load.audio('flexibility', 'audio/flexibilidad.wav');
+    this.load.audio('mitad', 'audio/mitad.wav');
+    this.load.audio('fallos', 'audio/fallos.wav');
+    this.load.audio('ritmo', 'audio/ritmo.wav');
+    this.load.audio('posicion', 'audio/posicion.wav');
+    this.load.audio('vamos', 'audio/posicion.wav');
   }
 
   /**

@@ -50,9 +50,9 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
 
   public destroyMarkerAnimation(touched: boolean): void {
     if (touched && !this.errorMarker || !touched && this.errorMarker) {
-      this.scene.sound.play(Constants.MUSIC.DESTROYTOUCHED, { volume: 0.85 });
+      this.scene.sound.play(Constants.AUDIO.DESTROYTOUCHED, { volume: 0.85 });
     } else {
-      this.scene.sound.play(Constants.MUSIC.DESTROYUNTOUCHED, { volume: 0.5 });
+      this.scene.sound.play(Constants.AUDIO.DESTROYUNTOUCHED, { volume: 0.5 });
     }
     this.timerEvent.remove(false);
     // this.group.destroy(true, true);

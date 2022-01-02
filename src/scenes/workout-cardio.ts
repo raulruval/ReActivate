@@ -80,7 +80,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
 
     /*****************************************/
 
-    this.audioScene = this.sound.add(Constants.MUSIC.TRANCE, { volume: 0.65, loop: false });
+    this.audioScene = this.sound.add(Constants.AUDIO.TRANCE, { volume: 0.65, loop: false });
 
     /************** Get ready markers ******** */
     this.buttonsReady.forEach((button) => {

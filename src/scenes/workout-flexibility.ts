@@ -92,7 +92,7 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
 
         /*****************************************/
 
-        this.audioScene = this.sound.add(Constants.MUSIC.TRANCE3, { volume: 0.40,loop: false });
+        this.audioScene = this.sound.add(Constants.AUDIO.TRANCE3, { volume: 0.40,loop: false });
 
         /************** Get ready markers ******** */
         this.buttonsReady.forEach((button) => {
@@ -352,18 +352,14 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
                                 rotation += Phaser.Math.Angle.Between(this.markers.find((marker) => marker.id === this.nextSequenceDirectionCopy[this.controlNextMarker]).x, this.markers.find((marker) => marker.id === this.nextSequenceDirectionCopy[this.controlNextMarker]).y, marker.x, marker.y);
                             } else {
                                 rotation += Phaser.Math.Angle.Between(marker.x, marker.y, this.prevMarker.x, this.prevMarker.y);
-
                             }
-                            console.log(rotation);
                         }
-
                         // Set rotation in invert direction sequences
                         if (!this.invertDirection && horizontalSequence) {
                             rotation = 1.57;
                         } else if (this.invertDirection && horizontalSequence) {
                             rotation = -1.57;
                         }
-
                         marker.setDirectionAngle(rotation);
                         this.prevMarker = marker;
                         marker.createAnimation();

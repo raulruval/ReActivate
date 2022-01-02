@@ -85,8 +85,8 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
 
     /*****************************************/
 
-    this.audioScene = this.sound.add(Constants.MUSIC.TRANCE2, { volume: 0.65, loop: false });
-    this.audioContactError = this.sound.add(Constants.MUSIC.CONTACTERROR, { loop: false });
+    this.audioScene = this.sound.add(Constants.AUDIO.TRANCE2, { volume: 0.65, loop: false });
+    this.audioContactError = this.sound.add(Constants.AUDIO.CONTACTERROR, { loop: false });
 
     /************** Get ready markers ******** */
     this.buttonsReady.forEach((button) => {
@@ -189,9 +189,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
       blendMode: 'ADD',
       tint: ['0xfff107']
     });
-    console.log(this.ballEmitter.tint);
-
-
+    
     this.ball = this.physics.add.image(this.ballAppearanceLeft ? 0 : this.width, this.ballAppearanceTop ? 100 : this.height, 'meteorite');
     this.ball.setScale(0.15);
     this.ball.setAlpha(0.75);
@@ -225,12 +223,10 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
       this.exp = this.exp - 1;
     }
     this.ballEmitter.tint.onChange(0xff0000);
-
     this.time.addEvent({
       delay: 500,
       callback: () => {
         this.ballEmitter.tint.onChange(0xfff107);
-
       },
       loop: true
     })
