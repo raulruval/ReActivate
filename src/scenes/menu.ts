@@ -8,6 +8,7 @@ import WorkoutCardio from './workout-cardio';
 import HUD from './hud';
 import WorkoutAgility from './workout-agilidad';
 import Historical from '~/modals/historical';
+import WorkoutFlexibilidad from './workout-flexibility';
 
 export default class Menu extends AbstractPoseTrackerScene {
   constructor() {
@@ -74,7 +75,7 @@ export default class Menu extends AbstractPoseTrackerScene {
     this.buttonLeft.setVisible(false);
     this.buttons.push(this.buttonLeft);
 
-    
+
     this.buttonPreviousHistorical = new CustomButtom(this, 80, this.height / 2, 'out', '＜', 95, -48);
     this.buttonPreviousHistorical.setVisible(false);
     this.buttonPreviousHistorical.setEnabled(false);
@@ -114,62 +115,71 @@ export default class Menu extends AbstractPoseTrackerScene {
     });
 
     for (var i = 0; i < 22; i++) {
-      let point = this.physics.add.sprite(-20, -20, 'point');
+      let point;
+      if (i === 9) {
+        point = this.physics.add.sprite(-50, -50, 'leftHand');
+        point.setScale(0.28);
+      } else if (i === 10) {
+        point = this.physics.add.sprite(-50, -50, 'rightHand');
+        point.setScale(0.28);
+      } else {
+        point = this.physics.add.sprite(-20, -20, 'point');
+        point.setAlpha(0);
+      }
+
       this.add.existing(point);
       this.bodyPoints.push(point);
     }
 
-    // this.time.addEvent({
-    //   delay: 10000,
-    //   callback: () => {
-    //     this.menuSwitch(this.cardio)
-    //   },
-    //   loop: false
-    // })
 
     this.buttons.forEach((button) => {
-
+      var ipoint = 0;
       this.bodyPoints.forEach((point) => {
-        this.physics.add.overlap(
-          button,
-          point,
-          () => {
-            button.animateToFill(false);
-            this.touchingButton = true;
-            if (button.buttonIsFull() && button.isEnabled()) {
-              button.emit('down', button);
-            }
-          },
-          undefined,
-          this,
-        );
+        ipoint++;
+        if (ipoint >= 4 && ipoint <= 11)
+          this.physics.add.overlap(
+            button,
+            point,
+            () => {
+              button.animateToFill(false);
+              this.touchingButton = true;
+              if (button.buttonIsFull() && button.isEnabled()) {
+                button.emit('down', button);
+              }
+            },
+            undefined,
+            this,
+          );
       });
-
-      if (button) {
-        button.setInteractive()
-          .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-            button.animateToFill(true);
-          })
-          .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-            button.animateToEmpty(true);
-          })
-          .on('down', () => {
-            button.animateToFill(true);
-            this.touchingButton = true;
-            if (button.buttonIsFull() && button.isEnabled()) {
-              this.menuSwitch(button);
-            }
-          })
-          .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-            button.animateToFill(true);
-            this.touchingButton = true;
-            if (button.buttonIsFull() && button.isEnabled()) {
-              this.menuSwitch(button);
-            }
-          });
+      try {
+        if (button) {
+          button.setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+              button.animateToFill(true);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+              button.animateToEmpty(true);
+            })
+            .on('down', () => {
+              button.animateToFill(true);
+              this.touchingButton = true;
+              if (button.buttonIsFull() && button.isEnabled()) {
+                this.menuSwitch(button);
+              }
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+              button.animateToFill(true);
+              this.touchingButton = true;
+              if (button.buttonIsFull() && button.isEnabled()) {
+                this.menuSwitch(button);
+              }
+            });
+        }
+      } catch (error) {
       }
-
     });
+
+
 
     if (this.scene.get(Constants.SCENES.WorkoutCardio))
       this.scene.remove(Constants.SCENES.WorkoutCardio);
@@ -181,8 +191,8 @@ export default class Menu extends AbstractPoseTrackerScene {
 
   menuSwitch(button: CustomButtom) {
     switch (button.getText()) {
-      case 'Flexibility':
-        //this.startNewSceneWorkout(Constants.SCENES.WorkoutCardio, WorkoutCardio);
+      case 'Flexibilidad':
+        this.startNewSceneWorkout(Constants.SCENES.WorkoutFlexibilidad, WorkoutFlexibilidad);
         break;
       case 'Cardio':
         this.startNewSceneWorkout(Constants.SCENES.WorkoutCardio, WorkoutCardio);
@@ -202,9 +212,6 @@ export default class Menu extends AbstractPoseTrackerScene {
         this.buttonExitMarker.setEnabled(true);
 
         this.statsOn = true;
-        break;
-      case 'Flexibilidad':
-
         break;
       case 'Historial':
         this.historicalView = new Historical(this, this.width / 2, this.height / 2, "backgroundStats");
@@ -235,21 +242,6 @@ export default class Menu extends AbstractPoseTrackerScene {
           this.buttonLeft.setVisible(true);
           this.setScreen2(true);
         }
-
-        // this.time.addEvent({
-        //   delay: 2500,
-        //   callback: () => {
-
-        //   },
-        //   loop: true
-        // })
-
-        //   this.tweens.add({
-        //     targets: endScreen,
-        //     duration: 500,
-        //     alpha: 1
-        // });
-
         break;
       case '◄':
         if (button.isEnabled()) {
@@ -325,6 +317,9 @@ export default class Menu extends AbstractPoseTrackerScene {
     if (this.bodyPoints && coords) {
       for (var i = 0; i < this.bodyPoints.length; i++) {
         this.bodyPoints[i].setPosition(coords[i + 11]?.x * 1280, coords[i + 11]?.y * 720);
+        if (i == 9 || i == 10) {
+          this.bodyPoints[i].rotation = -1.57 - Phaser.Math.Angle.Between(coords[i].x, coords[i].y, coords[i - 4].x, coords[i - 4].y);
+        }
       }
     }
   }
@@ -345,8 +340,8 @@ export default class Menu extends AbstractPoseTrackerScene {
     }
     super.update(time, delta, {
       renderElementsSettings: {
-        shouldDrawFrame: true,
-        shouldDrawPoseLandmarks: true,
+        shouldDrawFrame: false,
+        shouldDrawPoseLandmarks: false,
       },
       beforePaint: (poseTrackerResults, canvasTexture) => {
         // This function will be called before refreshing the canvas texture.

@@ -47,19 +47,15 @@ export default class Loader extends Phaser.Scene {
     this.load.on(
       'complete',
       () => {
-         this.scene.start(Constants.SCENES.Menu);
-        // this.scene.start(Constants.SCENES.WorkoutCardio);
-        // this.scene.start(Constants.SCENES.HUD);
-        // this.scene.bringToTop(Constants.SCENES.HUD);
-        // this.scene.start(Constants.SCENES.WorkoutAgilidad);
-        // this.scene.start(Constants.SCENES.HUD);
-        // this.scene.bringToTop(Constants.SCENES.HUD);
+        this.scene.start(Constants.SCENES.Menu);
       },
       this,
 
     );
 
     this.load.image('point', 'img/point.png');
+    this.load.image('rightHand', 'img/rightHand.png');
+    this.load.image('leftHand', 'img/leftHand.png');
     this.load.image('hud', 'img/hud.png');
     this.load.image('out', 'img/out.png');
     this.load.image('silhouette', 'img/blueSilhouette.png');
@@ -71,31 +67,32 @@ export default class Loader extends Phaser.Scene {
     this.load.image('transparentMarker', 'img/transparentMarker.png');
     this.load.image('backgroundStats', 'img/backgroundStats.png');
     this.load.image('room', 'img/room.png');
-    this.load.image('ball', 'img/koala.png');
+    this.load.image('ball', 'img/koala.png'); // TODO: Sustituir por bola roja
     this.load.image('meteorite', 'img/meteorite.png');
     this.load.image('particle-red', 'particles/particle-red.png');
     this.load.image('particle-orange', 'particles/particle-orange.png');
+    this.load.image('particle-blue', 'particles/particle-blue.png');
+    this.load.image('particle-green', 'particles/particle-green.png');
+    this.load.image('triangle', 'img/triangle.png');
+    this.load.image('redTriangle', 'img/redTriangle.png');
+
     this.load.bitmapFont('gothic', 'fonts/bitmap/gothic.png', 'fonts/bitmap/gothic.xml');
 
     // MUSIC & EFFECTS
     this.load.audio('trance', 'audio/trance.mp3');
     this.load.audio('trance2', 'audio/trance2.mp3');
-    this.load.audio('sfxDestroyMarkerTouched', 'audio/soundAnimation.wav');
+    this.load.audio('trance3', 'audio/trance3.mp3');
+    this.load.audio('sfxDestroyMarkerTouched', 'audio/soundAnimation.mp3');
     this.load.audio('sfxDestroyMarkerUntouched', 'audio/sfxDestroyMarkerUntouched.wav');
     this.load.audio('contactError', 'audio/contactError.wav');
-
-    //Listener cuando se hayan cargado todos los Assets
-    // this.load.on(
-    //   'complete',
-    //   () => {
-    //     const fuenteJSON = this.cache.json.get(Constantes.FUENTES.JSON);
-    //     this.cache.bitmapFont.add(Constantes.FUENTES.BITMAP, Phaser.GameObjects.RetroFont.Parse(this, fuenteJSON));
-
-    //     //carga MENU
-    //     this.scene.start(Constantes.ESCENAS.MENU);
-    //   },
-    //   this,
-    // );
+    this.load.audio('cardio', 'audio/cardio.wav');
+    this.load.audio('agility', 'audio/agilidad.wav');
+    this.load.audio('flexibility', 'audio/flexibilidad.wav');
+    this.load.audio('mitad', 'audio/mitad.wav');
+    this.load.audio('fallos', 'audio/fallos.wav');
+    this.load.audio('ritmo', 'audio/ritmo.wav');
+    this.load.audio('posicion', 'audio/posicion.wav');
+    this.load.audio('vamos', 'audio/posicion.wav');
   }
 
   /**

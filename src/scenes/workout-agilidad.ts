@@ -42,6 +42,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
   private touchedMarkers: number = 0;
   private untouchedMarkers: number = 0;
   private totalTouchableMarkers: number = 0;
+  private lastIdMarker = 0;
 
   constructor() {
     super(Constants.SCENES.WorkoutAgilidad);
@@ -85,8 +86,8 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
 
     /*****************************************/
 
-    this.audioScene = this.sound.add(Constants.MUSIC.TRANCE2, { loop: true });
-    this.audioContactError = this.sound.add(Constants.MUSIC.CONTACTERROR, { loop: false });
+    this.audioScene = this.sound.add(Constants.AUDIO.TRANCE2, { volume: 0.65, loop: false });
+    this.audioContactError = this.sound.add(Constants.AUDIO.CONTACTERROR, { loop: false });
 
     /************** Get ready markers ******** */
     this.buttonsReady.forEach((button) => {
@@ -189,9 +190,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
       blendMode: 'ADD',
       tint: ['0xfff107']
     });
-    console.log(this.ballEmitter.tint);
-
-
+    
     this.ball = this.physics.add.image(this.ballAppearanceLeft ? 0 : this.width, this.ballAppearanceTop ? 100 : this.height, 'meteorite');
     this.ball.setScale(0.15);
     this.ball.setAlpha(0.75);
@@ -225,12 +224,10 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
       this.exp = this.exp - 1;
     }
     this.ballEmitter.tint.onChange(0xff0000);
-
     this.time.addEvent({
       delay: 500,
       callback: () => {
         this.ballEmitter.tint.onChange(0xfff107);
-
       },
       loop: true
     })
@@ -261,7 +258,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
         texture: Constants.TRANSPARENTMARKER.ID,
         id: i,
       });
-
+      marker.setAgilityGame(true);
       if (i % 6 == 0) {
         height = height + 170;
         width = 50;
@@ -314,6 +311,10 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
     }
 
     this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
+    while (this.randomMarker === this.lastIdMarker) {
+      this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
+    }
+    this.lastIdMarker = this.randomMarker;
     if (this.exp >= 100) {
       this.ball.destroy();
       this.ballEmitter.manager.destroy()
@@ -335,7 +336,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
 
   saveData() {
     var date: string = Utils.getActualDate();
-    var statsData = new StatsData("agility", date, this.currentLevel, this.touchedMarkers, this.untouchedMarkers, this.totalTouchableMarkers);
+    var statsData = new StatsData("agilidad", date, this.currentLevel, this.touchedMarkers, this.untouchedMarkers, this.totalTouchableMarkers);
     Utils.setLocalStorageData(statsData);
   }
 

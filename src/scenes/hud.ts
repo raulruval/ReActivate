@@ -9,6 +9,21 @@ export default class HUD extends Phaser.Scene {
   private width: number;
   private height: number;
   private level = 1;
+  private audioCardio: Phaser.Sound.BaseSound;
+  private audioAgility: Phaser.Sound.BaseSound;
+  private audioFlexibility: Phaser.Sound.BaseSound;
+  private audioHalf: Phaser.Sound.BaseSound;
+  private audioFaults: Phaser.Sound.BaseSound;
+  private audioRhythm: Phaser.Sound.BaseSound;
+  private audioPosition: Phaser.Sound.BaseSound;
+  private audioGo: Phaser.Sound.BaseSound;
+  private countFailures = 0;
+  private countHits = 0;
+  private workoutActive;
+
+
+
+
 
   constructor() {
     super(Constants.SCENES.HUD);
@@ -22,15 +37,64 @@ export default class HUD extends Phaser.Scene {
   create(): void {
     const workoutCardio: Phaser.Scene = this.scene.get(Constants.SCENES.WorkoutCardio);
     const workoutAgilidad: Phaser.Scene = this.scene.get(Constants.SCENES.WorkoutAgilidad);
+    const WorkoutFlexibilidad: Phaser.Scene = this.scene.get(Constants.SCENES.WorkoutFlexibilidad);
 
-    if (workoutCardio) {
+    // Motivation audio
+    this.audioCardio = this.sound.add(Constants.AUDIO.CARDIO, { volume: 0.95, loop: false });
+    this.audioAgility = this.sound.add(Constants.AUDIO.AGILITY, { volume: 0.95, loop: false });
+    this.audioFlexibility = this.sound.add(Constants.AUDIO.FLEXIBILITY, { volume: 0.95, loop: false });
+    this.audioHalf = this.sound.add(Constants.AUDIO.HALF, { volume: 0.95, loop: false });
+    this.audioFaults = this.sound.add(Constants.AUDIO.FAULTS, { volume: 0.95, loop: false });
+    this.audioRhythm = this.sound.add(Constants.AUDIO.RHYTHM, { volume: 0.95, loop: false });
+    this.audioPosition = this.sound.add(Constants.AUDIO.POSITION, { volume: 0.95, loop: false });
+    this.audioGo = this.sound.add(Constants.AUDIO.GO, { volume: 0.95, loop: false });
+
+
+    if (this.scene.isActive(Constants.SCENES.WorkoutCardio)) {
       workoutCardio.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
       workoutCardio.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+      this.time.addEvent({
+        delay: 3000,
+        callback: () => {
+          this.audioCardio.play();
+          this.workoutActive = 'cardio';
+        },
+        loop: false
+      });
     }
-    if (workoutAgilidad) {
+    if (this.scene.isActive(Constants.SCENES.WorkoutAgilidad)) {
       workoutAgilidad.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
       workoutAgilidad.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+      this.time.addEvent({
+        delay: 3000,
+        callback: () => {
+          this.audioAgility.play();
+          this.workoutActive = 'agility';
+        },
+        loop: false
+      });
     }
+    if (this.scene.isActive(Constants.SCENES.WorkoutFlexibilidad)) {
+      WorkoutFlexibilidad.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
+      WorkoutFlexibilidad.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+
+      this.time.addEvent({
+        delay: 3000,
+        callback: () => {
+          this.audioFlexibility.play();
+          this.workoutActive = 'flexibility';
+        },
+        loop: false
+      });
+    }
+
+    this.time.addEvent({
+      delay: 10000,
+      callback: () => {
+        this.audioGo.play();
+      },
+      loop: false
+    });
 
     this.hudImage = this.add.image(this.width / 3, 50, 'hud');
     this.hudImage.setScale(0.9, 0.85);
@@ -52,7 +116,24 @@ export default class HUD extends Phaser.Scene {
 
   private updateExp(): void {
     if (parseInt(this.expTxt.text) > 9) {
-      this.expTxt.x = 80;
+      this.expTxt.x = 63;
+    }
+    if (this.registry.get(Constants.REGISTER.EXP) < this.lastExp) {
+      this.countHits = 0;
+      this.countFailures++;
+      if (this.countFailures == 30) {
+        this.audioFaults.play();
+        this.countFailures = 0;
+        this.countHits = 0;
+      }
+    } else if (this.registry.get(Constants.REGISTER.EXP) > this.lastExp) {
+      this.countFailures = 0;
+      this.countHits++;
+      if (this.countHits == 20) {
+        this.audioRhythm.play();
+        this.countFailures = 0;
+        this.countHits = 0;
+      }
     }
     this.tweens.addCounter({
       from: this.lastExp,
@@ -88,5 +169,25 @@ export default class HUD extends Phaser.Scene {
 
   private updateClock(): void {
     this.clockTxt.text = this.registry.get(Constants.REGISTER.CLOCK);
+    
+    switch (this.workoutActive) {
+      case 'cardio':
+          if (this.clockTxt.text == Constants.AUDIO.DURATIONTRANCE){
+            this.audioHalf.play();
+          }
+        break;
+      case 'agility':
+        if (this.clockTxt.text == Constants.AUDIO.DURATIONTRANCE2){
+          this.audioHalf.play();
+        }
+        break;
+      case 'flexibility':
+        if (this.clockTxt.text == Constants.AUDIO.DURATIONTRANCE3){
+          this.audioHalf.play();
+        }
+        break;
+      default:
+        break;
+    }
   }
 }
