@@ -49,6 +49,8 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
     private controlNextMarker: number = 0;
     private prevMarker;
     private showNextSequence: boolean = true;
+    private lastIdSequence = 0;
+
 
 
     constructor() {
@@ -92,7 +94,7 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
 
         /*****************************************/
 
-        this.audioScene = this.sound.add(Constants.AUDIO.TRANCE3, { volume: 0.40,loop: false });
+        this.audioScene = this.sound.add(Constants.AUDIO.TRANCE3, { volume: 0.40, loop: false });
 
         /************** Get ready markers ******** */
         this.buttonsReady.forEach((button) => {
@@ -280,6 +282,10 @@ export default class WorkoutFlexibilidad extends AbstractPoseTrackerScene {
                     this.currentLevel = Number(this.registry.get(Constants.REGISTER.LEVEL))
                     this.probabilityTypesMarkers(0.5);
                     this.randomSequence = Utils.random(0, sequences.length - 1);
+                    while (this.randomSequence === this.lastIdSequence) {
+                        this.randomSequence = Utils.random(0, sequences.length - 1);
+                    }
+                    this.lastIdSequence = this.randomSequence;
                     this.maxMarkers = sequences[this.randomSequence].length;
                     this.showNextSequence = true;
                 },

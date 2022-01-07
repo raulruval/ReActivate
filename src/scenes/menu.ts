@@ -135,7 +135,6 @@ export default class Menu extends AbstractPoseTrackerScene {
     this.buttons.forEach((button) => {
       var ipoint = 0;
       this.bodyPoints.forEach((point) => {
-        console.log(ipoint);-
         ipoint++;
         if (ipoint >= 4 && ipoint <= 11)
           this.physics.add.overlap(
@@ -177,7 +176,6 @@ export default class Menu extends AbstractPoseTrackerScene {
             });
         }
       } catch (error) {
-        console.log(error);
       }
     });
 

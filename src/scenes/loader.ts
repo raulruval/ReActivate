@@ -71,6 +71,8 @@ export default class Loader extends Phaser.Scene {
     this.load.image('meteorite', 'img/meteorite.png');
     this.load.image('particle-red', 'particles/particle-red.png');
     this.load.image('particle-orange', 'particles/particle-orange.png');
+    this.load.image('particle-blue', 'particles/particle-blue.png');
+    this.load.image('particle-green', 'particles/particle-green.png');
     this.load.image('triangle', 'img/triangle.png');
     this.load.image('redTriangle', 'img/redTriangle.png');
 

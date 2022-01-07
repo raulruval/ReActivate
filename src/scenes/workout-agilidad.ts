@@ -42,6 +42,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
   private touchedMarkers: number = 0;
   private untouchedMarkers: number = 0;
   private totalTouchableMarkers: number = 0;
+  private lastIdMarker = 0;
 
   constructor() {
     super(Constants.SCENES.WorkoutAgilidad);
@@ -310,6 +311,10 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
     }
 
     this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
+    while (this.randomMarker === this.lastIdMarker) {
+      this.randomMarker = Math.floor(Math.random() * (24 - 1 + 1)) + 1;
+    }
+    this.lastIdMarker = this.randomMarker;
     if (this.exp >= 100) {
       this.ball.destroy();
       this.ballEmitter.manager.destroy()

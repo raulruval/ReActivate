@@ -29,7 +29,6 @@ export default class Utils {
         sortedStats.sort((a: any, b: any) => {
             return   new Date(b._date).valueOf() - new Date(a._date).valueOf();
         })
-        console.log(sortedStats);
         return sortedStats;
     }
 

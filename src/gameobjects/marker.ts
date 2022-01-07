@@ -18,7 +18,8 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   private agilityGame: boolean;
   private directionAngle: number = 0;
   private flagChangeAngle = false;
-
+  private emitter0;
+  private emitter1;
 
   constructor(config: any) {
     super(config.scene, config.x, config.y, config.texture, config.id);
@@ -29,6 +30,8 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
     this.animationCreated = false;
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
+
+
   }
 
   update(): void {
@@ -49,19 +52,60 @@ export default class Marker extends Phaser.Physics.Arcade.Sprite {
   }
 
   public destroyMarkerAnimation(touched: boolean): void {
+    this.emitter0 = this.scene.add.particles('particle-blue').createEmitter({
+      x: this.coordx,
+      y: this.coordy,
+      speed: { min: -800, max: 800 },
+      angle: { min: 0, max: 360 },
+      scale: { start: 0.5, end: 0 },
+      blendMode: 'SCREEN',
+      //active: false,
+      lifespan: 600,
+      gravityY: 800
+    });
+
+    this.emitter1 = this.scene.add.particles('particle-green').createEmitter({
+      x: this.coordx,
+      y: this.coordy,
+      speed: { min: -800, max: 800 },
+      angle: { min: 0, max: 360 },
+      scale: { start: 0.3, end: 0 },
+      blendMode: 'SCREEN',
+      //active: false,
+      lifespan: 300,
+      gravityY: 800
+    });
+
+    this.internalTimerConsumed = false;
+    this.animationCreated = false;
+
+
     if (touched && !this.errorMarker || !touched && this.errorMarker) {
       this.scene.sound.play(Constants.AUDIO.DESTROYTOUCHED, { volume: 0.85 });
     } else {
       this.scene.sound.play(Constants.AUDIO.DESTROYUNTOUCHED, { volume: 0.5 });
     }
     this.timerEvent.remove(false);
-    // this.group.destroy(true, true);
-    this.ball.destroy();
-    this.internalTimerConsumed = false;
-    this.animationCreated = false;
+
+
+    this.scene.time.addEvent({
+      delay: 150,
+      callback: () => {
+        this.ball.destroy();
+        this.emitter0.manager.destroy();
+        this.emitter1.manager.destroy();
+      },
+      loop: false
+    });
+
   }
 
   createAnimation(currentLevel: number): void {
+    if (this.ball){
+      this.ball.destroy();
+      this.emitter0.manager.destroy();
+      this.emitter1.manager.destroy();
+    }
 
     if (this.errorMarker) {
       this.ball = this.scene.add.sprite(this.coordx, this.coordy, this.defaultErrorMarker);

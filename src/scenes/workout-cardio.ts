@@ -38,6 +38,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
   private touchedMarkers: number = 0;
   private untouchedMarkers: number = 0;
   private totalTouchableMarkers: number = 0;
+  private lastIdMarker = 0;
 
   constructor() {
     super(Constants.SCENES.WorkoutCardio);
@@ -271,7 +272,11 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
 
     // Update variables for next markers
     this.randomMarker = Math.floor(Math.random() * (14 - 1 + 1)) + 1;
-    if (this.currentMarkersAlive == 0) {
+    while (this.randomMarker === this.lastIdMarker) {
+      this.randomMarker = Math.floor(Math.random() * (14 - 1 + 1)) + 1;
+    }
+    this.lastIdMarker = this.randomMarker;
+    if (this.currentMarkersAlive === 0) {
       this.currentLevel = Number(this.registry.get(Constants.REGISTER.LEVEL))
       this.probabilityTypesMarkers(0.15, this.currentLevel / 10);
       if (this.multipleMarkerProb && this.currentLevel > 5) {

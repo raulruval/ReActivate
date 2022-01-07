@@ -118,19 +118,20 @@ export default class HUD extends Phaser.Scene {
     if (parseInt(this.expTxt.text) > 9) {
       this.expTxt.x = 63;
     }
-    console.log(this.registry.get(Constants.REGISTER.EXP) + "y" + this.lastExp);
     if (this.registry.get(Constants.REGISTER.EXP) < this.lastExp) {
       this.countHits = 0;
       this.countFailures++;
-      if (this.countFailures == 12) {
+      if (this.countFailures == 30) {
         this.audioFaults.play();
         this.countFailures = 0;
+        this.countHits = 0;
       }
-    } else {
+    } else if (this.registry.get(Constants.REGISTER.EXP) > this.lastExp) {
       this.countFailures = 0;
       this.countHits++;
-      if (this.countHits == 6) {
+      if (this.countHits == 20) {
         this.audioRhythm.play();
+        this.countFailures = 0;
         this.countHits = 0;
       }
     }
@@ -168,7 +169,6 @@ export default class HUD extends Phaser.Scene {
 
   private updateClock(): void {
     this.clockTxt.text = this.registry.get(Constants.REGISTER.CLOCK);
-    console.log(this.clockTxt.text);
     
     switch (this.workoutActive) {
       case 'cardio':
