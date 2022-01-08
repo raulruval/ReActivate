@@ -65,8 +65,8 @@ export default class PoseTracker {
 
     if (renderElementsSettings?.shouldDrawPoseLandmarks && results.poseLandmarks) {
       ctx.save();
-      drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS, { color: '#00FF00', lineWidth: 4 });
-      drawLandmarks(ctx, results.poseLandmarks, { color: '#FF0000', lineWidth: 2 });
+      //drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS, { color: '#00FF00', lineWidth: 4 });
+      //drawLandmarks(ctx, results.poseLandmarks, { color: '#FF0000', lineWidth: 2 });
       ctx.restore();
     }
   }

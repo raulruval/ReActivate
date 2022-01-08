@@ -76,6 +76,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
     for (var i = 0; i < 22; i++) {
       let point = this.physics.add.sprite(-20, -20, 'point');
       this.add.existing(point);
+      point.setAlpha(0);
       this.bodyPoints.push(point);
     }
 
