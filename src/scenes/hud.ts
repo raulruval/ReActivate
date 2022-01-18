@@ -20,6 +20,7 @@ export default class HUD extends Phaser.Scene {
   private countFailures = 0;
   private countHits = 0;
   private workoutActive;
+  private stopAudioB: boolean = false;
 
 
 
@@ -53,10 +54,14 @@ export default class HUD extends Phaser.Scene {
     if (this.scene.isActive(Constants.SCENES.WorkoutCardio)) {
       workoutCardio.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
       workoutCardio.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+      workoutCardio.events.on(Constants.EVENT.STOPAUDIOINIT, this.stopAudio, this);
       this.time.addEvent({
         delay: 3000,
         callback: () => {
-          this.audioCardio.play();
+          console.log(this.stopAudioB);
+          if (this.stopAudioB === false) {
+            this.audioCardio.play();
+          }
           this.workoutActive = 'cardio';
         },
         loop: false
@@ -65,10 +70,13 @@ export default class HUD extends Phaser.Scene {
     if (this.scene.isActive(Constants.SCENES.WorkoutAgilidad)) {
       workoutAgilidad.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
       workoutAgilidad.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
+      workoutAgilidad.events.on(Constants.EVENT.STOPAUDIOINIT, this.stopAudio, this);
       this.time.addEvent({
         delay: 3000,
         callback: () => {
-          this.audioAgility.play();
+          if (this.stopAudioB === false) {
+            this.audioAgility.play();
+          }
           this.workoutActive = 'agility';
         },
         loop: false
@@ -77,11 +85,13 @@ export default class HUD extends Phaser.Scene {
     if (this.scene.isActive(Constants.SCENES.WorkoutFlexibilidad)) {
       WorkoutFlexibilidad.events.on(Constants.EVENT.UPDATEEXP, this.updateExp, this);
       WorkoutFlexibilidad.events.on(Constants.EVENT.CLOCK, this.updateClock, this);
-
+      WorkoutFlexibilidad.events.on(Constants.EVENT.STOPAUDIOINIT, this.stopAudio, this);
       this.time.addEvent({
         delay: 3000,
         callback: () => {
-          this.audioFlexibility.play();
+          if (this.stopAudioB === false) {
+            this.audioFlexibility.play();
+          }
           this.workoutActive = 'flexibility';
         },
         loop: false
@@ -91,7 +101,10 @@ export default class HUD extends Phaser.Scene {
     this.time.addEvent({
       delay: 10000,
       callback: () => {
-        this.audioGo.play();
+        if (this.stopAudioB === false) {
+          console.log(this.audioGo)
+          this.audioGo.play();
+        }
       },
       loop: false
     });
@@ -169,20 +182,20 @@ export default class HUD extends Phaser.Scene {
 
   private updateClock(): void {
     this.clockTxt.text = this.registry.get(Constants.REGISTER.CLOCK);
-    
+
     switch (this.workoutActive) {
       case 'cardio':
-          if (this.clockTxt.text == Constants.AUDIO.DURATIONTRANCE){
-            this.audioHalf.play();
-          }
+        if (this.clockTxt.text == Constants.AUDIO.DURATIONTRANCE) {
+          this.audioHalf.play();
+        }
         break;
       case 'agility':
-        if (this.clockTxt.text == Constants.AUDIO.DURATIONTRANCE2){
+        if (this.clockTxt.text == Constants.AUDIO.DURATIONTRANCE2) {
           this.audioHalf.play();
         }
         break;
       case 'flexibility':
-        if (this.clockTxt.text == Constants.AUDIO.DURATIONTRANCE3){
+        if (this.clockTxt.text == Constants.AUDIO.DURATIONTRANCE3) {
           this.audioHalf.play();
         }
         break;
@@ -190,4 +203,15 @@ export default class HUD extends Phaser.Scene {
         break;
     }
   }
+
+  private stopAudio(): void {
+    console.log("recibo emisión");
+    this.stopAudioB = true;
+    this.audioAgility.stop();
+    this.audioCardio.stop();
+    this.audioFlexibility.stop();
+    this.audioPosition.stop();
+    this.audioGo.stop();
+  }
+
 }

@@ -73,7 +73,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
     this.silhouetteImage = this.add.image(640, 420, 'silhouette');
     this.silhouetteImage.setScale(0.7, 0.65);
     // body points
-    for (var i = 0; i < 22; i++) {
+    for (var i = 0; i < 24; i++) {
       let point = this.physics.add.sprite(-20, -20, 'point');
       this.add.existing(point);
       point.setAlpha(0);
@@ -156,6 +156,7 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
     }
     if (this.getReadyLeft && this.getReadyRight) {
       this.startWorkout();
+      this.events.emit(Constants.EVENT.STOPAUDIOINIT);
     }
   }
 
@@ -176,7 +177,13 @@ export default class WorkoutCardio extends AbstractPoseTrackerScene {
   movePoints(coords: IPoseLandmark[] | undefined) {
     if (this.bodyPoints && coords) {
       for (var i = 0; i < this.bodyPoints.length; i++) {
-        this.bodyPoints[i]?.setPosition(coords[i + 11]?.x * 1280, coords[i + 11]?.y * 720);
+        if (i + 11 == 23){ // To extend hands points (improve accuracy)
+          this.bodyPoints[i]?.setPosition(coords[19]?.x * 1280 + 20, coords[19]?.y * 720 - 40);
+        }else if (i + 11 == 24){
+          this.bodyPoints[i]?.setPosition(coords[20]?.x * 1280 - 20, coords[20]?.y * 720 - 40);
+        }else{
+          this.bodyPoints[i]?.setPosition(coords[i + 11]?.x * 1280, coords[i + 11]?.y * 720);
+        }
       }
     }
   }

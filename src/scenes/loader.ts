@@ -67,7 +67,6 @@ export default class Loader extends Phaser.Scene {
     this.load.image('transparentMarker', 'img/transparentMarker.png');
     this.load.image('backgroundStats', 'img/backgroundStats.png');
     this.load.image('room', 'img/room.png');
-    this.load.image('ball', 'img/koala.png'); // TODO: Sustituir por bola roja
     this.load.image('meteorite', 'img/meteorite.png');
     this.load.image('particle-red', 'particles/particle-red.png');
     this.load.image('particle-orange', 'particles/particle-orange.png');
@@ -78,7 +77,7 @@ export default class Loader extends Phaser.Scene {
 
     this.load.bitmapFont('gothic', 'fonts/bitmap/gothic.png', 'fonts/bitmap/gothic.xml');
 
-    // MUSIC & EFFECTS
+    // MUSIC, EFFECTS %% VIDEOS
     this.load.audio('trance', 'audio/trance.mp3');
     this.load.audio('trance2', 'audio/trance2.mp3');
     this.load.audio('trance3', 'audio/trance3.mp3');
@@ -93,6 +92,9 @@ export default class Loader extends Phaser.Scene {
     this.load.audio('ritmo', 'audio/ritmo.wav');
     this.load.audio('posicion', 'audio/posicion.wav');
     this.load.audio('vamos', 'audio/posicion.wav');
+    this.load.audio('audioTutorial', 'audio/tutorial.mp3');
+    this.load.video('tutorial','img/tutorial.mp4','tutorial',false, true)
+    
   }
 
   /**

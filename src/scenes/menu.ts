@@ -33,6 +33,8 @@ export default class Menu extends AbstractPoseTrackerScene {
   private historicalView: Historical;
   private titleText: Phaser.GameObjects.Text;
   private statsOn;
+  private videoTutorial;
+  private audioTutorial;
 
   private bodyPoints: any = [];
   private buttons: any[] = [];
@@ -55,9 +57,13 @@ export default class Menu extends AbstractPoseTrackerScene {
       fontStyle: 'normal',
     });
     this.titleText.depth = 1;
-    this.titleText.setVisible(false); // Quitar después de demo
+    this.titleText.setVisible(false);
 
     this.background = this.add.image(1280, 720 / 2, "room");
+
+    this.audioTutorial = this.sound.add(Constants.AUDIO.AUDIOTUTORIAL, { volume: 0.65, loop: false });
+    this.sound.pauseOnBlur = false;
+
 
     this.flexibility = new CustomButtom(this, 250, 220, 'button', 'Flexibilidad');
     this.buttons.push(this.flexibility);
@@ -118,10 +124,10 @@ export default class Menu extends AbstractPoseTrackerScene {
       let point;
       if (i === 9) {
         point = this.physics.add.sprite(-50, -50, 'leftHand');
-        point.setScale(0.28);
+        point.setScale(0.20);
       } else if (i === 10) {
         point = this.physics.add.sprite(-50, -50, 'rightHand');
-        point.setScale(0.28);
+        point.setScale(0.20);
       } else {
         point = this.physics.add.sprite(-20, -20, 'point');
         point.setAlpha(0);
@@ -184,7 +190,9 @@ export default class Menu extends AbstractPoseTrackerScene {
     if (this.scene.get(Constants.SCENES.WorkoutCardio))
       this.scene.remove(Constants.SCENES.WorkoutCardio);
     if (this.scene.get(Constants.SCENES.WorkoutAgilidad))
-      this.scene.remove(Constants.SCENES.WorkoutCardio);
+      this.scene.remove(Constants.SCENES.WorkoutAgilidad);
+    if (this.scene.get(Constants.SCENES.WorkoutFlexibilidad))
+      this.scene.remove(Constants.SCENES.WorkoutFlexibilidad);
     if (this.scene.get(Constants.SCENES.HUD))
       this.scene.remove(Constants.SCENES.HUD);
   }
@@ -201,6 +209,15 @@ export default class Menu extends AbstractPoseTrackerScene {
         this.startNewSceneWorkout(Constants.SCENES.WorkoutAgilidad, WorkoutAgility);
         break;
       case 'Tutorial':
+        this.videoTutorial = this.add.video(this.width / 2, this.height / 2, 'tutorial');
+        this.videoTutorial.play();
+        this.audioTutorial.play();
+        this.buttonLeft.setVisible(false);
+        this.buttonLeft.setEnabled(false);
+        this.setScreen2(false);
+        this.titleText.setVisible(false);
+        this.buttonExitMarker.setVisible(true);
+        this.buttonExitMarker.setEnabled(true);
         break;
       case 'Estadísticas':
         this.statsView = new Stats(this, this.width / 2, this.height / 2, "backgroundStats");
@@ -274,6 +291,10 @@ export default class Menu extends AbstractPoseTrackerScene {
         if (this.statsView)
           this.statsView.destroyStats();
         this.statsOn = false;
+        if (this.videoTutorial.isPlaying) {
+          this.videoTutorial.destroy();
+          this.audioTutorial.stop();
+        }
         break;
       case '＞':
         this.historicalView.showHistorical(true);

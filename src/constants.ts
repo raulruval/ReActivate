@@ -2,6 +2,7 @@ const Constants = {
   EVENT: {
     UPDATEEXP: 'updateExp',
     CLOCK: 'clock',
+    STOPAUDIOINIT: 'stopAudioInit'
   },
   REGISTER: {
     EXP: 'exp',
@@ -49,6 +50,7 @@ const Constants = {
     RHYTHM: 'ritmo',
     POSITION: 'posicion',
     GO: 'vamos',
+    AUDIOTUTORIAL: 'audioTutorial'
   },
 
   DATA: {

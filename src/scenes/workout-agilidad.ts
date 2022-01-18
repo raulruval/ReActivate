@@ -78,7 +78,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
     this.silhouetteImage = this.add.image(640, 420, 'silhouette');
     this.silhouetteImage.setScale(0.7, 0.65);
     // body points
-    for (var i = 0; i < 33; i++) {
+    for (var i = 0; i < 35; i++) {
       let point = this.physics.add.sprite(-20, -20, 'point');
       this.add.existing(point);
       point.setAlpha(0);
@@ -164,6 +164,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
     }
     if (this.getReadyLeft && this.getReadyRight) {
       this.startWorkout();
+      this.events.emit(Constants.EVENT.STOPAUDIOINIT);
     }
   }
 
@@ -191,7 +192,7 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
       blendMode: 'ADD',
       tint: ['0xfff107']
     });
-    
+
     this.ball = this.physics.add.image(this.ballAppearanceLeft ? 0 : this.width, this.ballAppearanceTop ? 100 : this.height, 'meteorite');
     this.ball.setScale(0.15);
     this.ball.setAlpha(0.75);
@@ -242,7 +243,13 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
   movePoints(coords: IPoseLandmark[] | undefined) {
     if (this.bodyPoints && coords) {
       for (var i = 0; i < this.bodyPoints.length; i++) {
-        this.bodyPoints[i]?.setPosition(coords[i]?.x * 1280, coords[i]?.y * 720);
+        if (i == 34) { // To extend hands points (improve accuracy)
+          this.bodyPoints[i]?.setPosition(coords[19]?.x * 1280 + 20, coords[19]?.y * 720 - 40);
+        } else if (i == 35) {
+          this.bodyPoints[i]?.setPosition(coords[20]?.x * 1280 - 20, coords[20]?.y * 720 - 40);
+        } else {
+          this.bodyPoints[i]?.setPosition(coords[i]?.x * 1280, coords[i]?.y * 720);
+        }
       }
     }
   }
