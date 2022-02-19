@@ -1,12 +1,4 @@
-# Physio Galenus Webapp for Remote Rehabilitation
-
-## Getting Started
-
 ### Installation
-
-Clone this repository to your local machine.
-
-Then, go to the cloned directory and install dependencies:
 
 ```bash
 npm install && npm run install-pose-runtimes
@@ -21,15 +13,6 @@ Also, check the _scripts/install-pose-runtimes.sh_ script for advanced options.
 ```bash
 npm start
 ```
-
-### To create a production build:
-
-```bash
-npm run build
-```
-
-Production builds are automatically deployed to production when pushing to the `master` branch, and are available
-in https://dev.furiouskoalas.com/physio-galenus
 
 ## Project Structure
 
@@ -50,13 +33,6 @@ in https://dev.furiouskoalas.com/physio-galenus
 TypeScript files are intended to be in the `src/` folder. `main.ts` is the entry point to build the `bundle.js` file
 referenced by `index.html`; that file will be copied to the `public/` directory on every build along with its source
 maps (if development environment).
-
-## Static Assets
-
-Any static assets like images or audio files should be placed in the `public/assets/` folder. It'll then be served
-at http://localhost:8000/assets/images/my-image.png
-
-They can then be loaded by Phaser with `this.image.load('my-image', 'assets/images/my-image.png')`.
 
 ## Pose Tracker
 
