@@ -124,10 +124,10 @@ export default class Menu extends AbstractPoseTrackerScene {
       let point;
       if (i === 9) {
         point = this.physics.add.sprite(-50, -50, 'leftHand');
-        point.setScale(0.20);
+        point.setScale(0.35);
       } else if (i === 10) {
         point = this.physics.add.sprite(-50, -50, 'rightHand');
-        point.setScale(0.20);
+        point.setScale(0.35);
       } else {
         point = this.physics.add.sprite(-20, -20, 'point');
         point.setAlpha(0);
@@ -291,7 +291,7 @@ export default class Menu extends AbstractPoseTrackerScene {
         if (this.statsView)
           this.statsView.destroyStats();
         this.statsOn = false;
-        if (this.videoTutorial.isPlaying) {
+        if (this.videoTutorial && this.videoTutorial.isPlaying) {
           this.videoTutorial.destroy();
           this.audioTutorial.stop();
         }
@@ -337,9 +337,9 @@ export default class Menu extends AbstractPoseTrackerScene {
   movePoints(coords: IPoseLandmark[] | undefined) {
     if (this.bodyPoints && coords) {
       for (var i = 0; i < this.bodyPoints.length; i++) {
-        this.bodyPoints[i].setPosition(coords[i + 11]?.x * 1280, coords[i + 11]?.y * 720);
         if (i == 9 || i == 10) {
-          this.bodyPoints[i].rotation = -1.57 - Phaser.Math.Angle.Between(coords[i].x, coords[i].y, coords[i - 4].x, coords[i - 4].y);
+          this.bodyPoints[i].setPosition(coords[i + 11]?.x * 1280, coords[i + 11]?.y * 720);
+          //this.bodyPoints[i].rotation = -1.57 - Phaser.Math.Angle.Between(coords[i].x, coords[i].y, coords[i - 4].x, coords[i - 4].y);
         }
       }
     }

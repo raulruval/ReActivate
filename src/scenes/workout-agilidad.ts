@@ -324,9 +324,14 @@ export default class WorkoutAgility extends AbstractPoseTrackerScene {
     }
     this.lastIdMarker = this.randomMarker;
     if (this.exp >= 100) {
-      this.ball.destroy();
-      this.ballEmitter.manager.destroy()
-      this.createContactBall();
+      this.time.addEvent({
+        delay: 600,                // ms
+        callback: () => {
+          this.ball.destroy();
+          this.ballEmitter.manager.destroy()
+          this.createContactBall();
+        }
+      });
     }
 
     this.registry.set(Constants.REGISTER.EXP, this.exp);
